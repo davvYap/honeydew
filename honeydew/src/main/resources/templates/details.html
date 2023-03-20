@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Details</title>
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/bootstrap.css" />
+  </head>
+  <body class="">
+    <div class="container-fluid context">
+      <div class="row mx-5 mt-5 d-flex justify-content-around">
+        <span class="col-2 text-center">
+          <a href="/register/nextRegistration" class="btn btn-outline-light">Back</a>
+        </span>
+        <span class="col-2 text-center">
+          <a href="/" class="btn btn-outline-light">Home</a>
+        </span>
+      </div>
+      <div class="row justify-content-center align-items-center">
+        <div class="my-3 col-5">
+          <h1 class="h1 my-3 text-light text-center">Please confirm your details</h1>
+          <div class="table-responsive">
+            <table class="table table-light" data-th-object="${member}">
+              <tr>
+                <td>Name:</td>
+                <td data-th-text="*{name}"></td>
+              </tr>
+              <tr>
+                <td>Batch:</td>
+                <td data-th-text="*{batch}"></td>
+              </tr>
+              <tr>
+                <td>State/City:</td>
+                <td data-th-text="${state}"></td>
+              </tr>
+              <tr>
+                <td>Phone Number:</td>
+                <td data-th-text="*{phoneNum}"></td>
+              </tr>
+              <tr>
+                <td>Email:</td>
+                <td data-th-text="*{email}"></td>
+              </tr>
+              <tr>
+                <td>Date of Birth</td>
+                <td data-th-text="*{dateOfBirth}"></td>
+              </tr>
+              <tr>
+                <td>Age</td>
+                <td data-th-text="*{age}"></td>
+              </tr>
+            </table>
+            <table class="table table-light" data-th-object="${dinner}">
+              <tr>
+                <td>Attending the Dinner:</td>
+                <td data-th-text="${dinner.getIsAttending()}? 'Yes':'No'"></td>
+              </tr>
+              <tr>
+                <td>Vegetarian:</td>
+                <td data-th-text="${dinner.getIsVegetarian()}? 'Yes':'No'"></td>
+              </tr>
+              <tr>
+                <td>Allergic Food:</td>
+                <td data-th-text="${dinner.getAllergicFood()}"></td>
+              </tr>
+            </table>
+          </div>
+
+          <div class="row mx-5 mt-5 d-flex justify-content-around">
+            <!-- <span class="col-2 text-center">
+              <a
+                data-th-href="@{'/create/edit/' + ${team.teamName}}"
+                class="btn btn-outline-warning"
+                role="button"
+                style="width: 6rem"
+                >Edit</a
+              >
+            </span> -->
+            <span class="col-2 text-center">
+              <form data-th-action="@{/confirmed}" method="post">
+                <button type="submit" class="btn btn-outline-light" style="width: 6rem">
+                  Submit
+                </button>
+              </form>
+            </span>
+            <!-- <span class="col-2 text-center">
+              <a
+                data-th-href="@{'/create/delete/' + ${team.teamName}}"
+                class="btn btn-outline-danger"
+                role="button"
+                style="width: 6rem">
+                Delete
+              </a>
+            </span> -->
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="area">
+      <ul class="circles">
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+      </ul>
+    </div>
+    <script src="/js/script.js"></script>
+    <script src="/js/bootstrap.js"></script>
+  </body>
+</html>

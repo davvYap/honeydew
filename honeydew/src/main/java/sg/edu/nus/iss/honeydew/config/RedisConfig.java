@@ -26,7 +26,7 @@ public class RedisConfig {
     @Value("${spring.data.redis.password}")
     private String redisPassword;
 
-    @Bean("calculator")
+    @Bean("honeydew")
     @Scope("singleton")
     public RedisTemplate<String, String> redisTemplate() {
         final RedisStandaloneConfiguration config = new RedisStandaloneConfiguration();

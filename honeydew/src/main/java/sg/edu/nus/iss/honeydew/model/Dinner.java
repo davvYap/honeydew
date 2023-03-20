@@ -3,12 +3,13 @@ package sg.edu.nus.iss.honeydew.model;
 import java.io.Serializable;
 
 import jakarta.json.Json;
+import jakarta.json.JsonObject;
 import jakarta.json.JsonObjectBuilder;
 import jakarta.validation.constraints.NotNull;
 
 public class Dinner implements Serializable {
     @NotNull(message = "Please select an option")
-    private Boolean isAttending = false;
+    private Boolean isAttending = true;
 
     @NotNull(message = "Please select an option")
     private Boolean isVegetarian = false;
@@ -16,7 +17,7 @@ public class Dinner implements Serializable {
     @NotNull(message = "Please select an option")
     private Boolean isAllergic = false;
 
-    private String allergicFood;
+    private String allergicFood = "No allergic";
 
     public Boolean getIsAttending() {
         return isAttending;
@@ -51,18 +52,20 @@ public class Dinner implements Serializable {
     }
 
     public JsonObjectBuilder toJSON() {
-        if (this.getIsAllergic()) {
-            return Json.createObjectBuilder()
-                    .add("is_attending", this.getIsAttending() ? "Yes" : "No")
-                    .add("is_alergic", this.getIsAllergic() ? "Yes" : "No")
-                    .add("is_vegetarian", this.getIsVegetarian() ? "Yes" : "No")
-                    .add("allergic_food", "No allergic");
-        }
         return Json.createObjectBuilder()
                 .add("is_attending", this.getIsAttending() ? "Yes" : "No")
                 .add("is_alergic", this.getIsAllergic() ? "Yes" : "No")
                 .add("is_vegetarian", this.getIsVegetarian() ? "Yes" : "No")
                 .add("allergic_food", this.getAllergicFood());
+    }
+
+    public JsonObject toJSONObject() {
+        return Json.createObjectBuilder()
+                .add("is_attending", this.getIsAttending() ? "Yes" : "No")
+                .add("is_alergic", this.getIsAllergic() ? "Yes" : "No")
+                .add("is_vegetarian", this.getIsVegetarian() ? "Yes" : "No")
+                .add("allergic_food", this.getAllergicFood())
+                .build();
     }
 
 }

@@ -140,7 +140,8 @@ public class Member implements Serializable {
                 .add("city", this.getCity().toJSON())
                 .add("phone", this.getPhoneNum())
                 .add("email", this.getEmail())
-                .add("date of birth", this.getDateOfBirth().toString()).build();
+                .add("date of birth", this.getDateOfBirth().toString())
+                .build();
     }
 
 }

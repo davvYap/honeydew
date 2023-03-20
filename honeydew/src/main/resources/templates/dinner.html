@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="/css/style.css" />
-    <link rel="stylesheet" href="css/bootstrap.css" />
+    <link rel="stylesheet" href="/css/bootstrap.css" />
     <title>Dinner</title>
   </head>
   <body class="context">
@@ -21,34 +21,38 @@
             <form
               action=""
               method="post"
-              data-th-action="@{/confirmDetails}"
+              data-th-action="@{/register/nextRegistration/confirmDetails}"
               data-th-object="${dinner}">
               <!-- isAttending -->
-              <div class="input-group mb-1">
-                <div class="badge bg-light text-wrap fs-5 mb-2 text-muted" style="width: 10rem">
+              <div
+                class="input-group mb-1 row d-flex justify-content-start align-items-center my-3">
+                <div class="badge bg-light text-wrap fs-5 mb-2 text-muted me-5 col-6">
                   Would you like to attend the dinner?
                 </div>
-                <div class="form-check form-check-inline">
+                <div
+                  class="btn-group col-6 mb-1"
+                  role="group"
+                  aria-label="Basic radio toggle button group ">
                   <input
-                    class="form-check-input"
                     type="radio"
+                    class="btn-check"
+                    name="btnradio"
+                    id="btnradio1"
+                    autocomplete="off"
+                    data-th-field="*{isAttending}"
                     value="true"
-                    id="dinner-radio1"
-                    data-th-field="*{isAttending}" />
-                  <label class="form-check-label text-light" for="dinner-radio1">
-                    <p>Yes 😃</p>
-                  </label>
-                </div>
-                <div class="form-check form-check-inline">
+                    checked />
+                  <label class="btn btn-outline-light" for="btnradio1">Yes 😃</label>
+
                   <input
-                    class="form-check-input"
                     type="radio"
-                    value="false"
-                    id="dinner-radio2"
-                    data-th-field="*{isAttending}" />
-                  <label class="form-check-label text-light" for="dinner-radio2">
-                    <p>No ☹️</p>
-                  </label>
+                    class="btn-check"
+                    name="btnradio"
+                    id="btnradio2"
+                    autocomplete="off"
+                    data-th-field="*{isAttending}"
+                    value="false" />
+                  <label class="btn btn-outline-light" for="btnradio2">No ☹️</label>
                 </div>
               </div>
               <div class="mb-1">
@@ -58,33 +62,35 @@
                   data-th-errors="*{isAttending}">
                 </span>
               </div>
-
               <!-- isVegetarian -->
-              <div class="input-group mb-1">
-                <div class="badge bg-light text-wrap fs-5 mb-2 text-muted" style="width: 10rem">
-                  Are you a vegetarian/vegan?
+              <div class="input-group mb-1 row d-flex align-items-center my-3">
+                <div class="badge bg-light text-wrap fs-5 mb-2 text-muted me-5 col-6">
+                  Are you a vegetarian?
                 </div>
-                <div class="form-check form-check-inline">
+                <div
+                  class="btn-group col-6 mb-1"
+                  role="group"
+                  aria-label="Basic radio toggle button group ">
                   <input
-                    class="form-check-input"
                     type="radio"
+                    class="btn-check"
+                    name="btnradio"
+                    id="btnradio1"
+                    autocomplete="off"
+                    data-th-field="*{isVegetarian}"
                     value="true"
-                    id="dinner-radio5"
-                    data-th-field="*{isVegetarian}" />
-                  <label class="form-check-label text-light" for="dinner-radio5">
-                    <p>Yes 🍅</p>
-                  </label>
-                </div>
-                <div class="form-check form-check-inline">
+                    checked />
+                  <label class="btn btn-outline-light" for="btnradio1">Yes 🍅</label>
+
                   <input
-                    class="form-check-input"
                     type="radio"
-                    value="false"
-                    id="dinner-radio6"
-                    data-th-field="*{isVegetarian}" />
-                  <label class="form-check-label text-light" for="dinner-radio6">
-                    <p>No 🍖</p>
-                  </label>
+                    class="btn-check"
+                    name="btnradio"
+                    id="btnradio2"
+                    autocomplete="off"
+                    data-th-field="*{isVegetarian}"
+                    value="false" />
+                  <label class="btn btn-outline-light" for="btnradio2">No 🍖</label>
                 </div>
               </div>
               <div class="mb-1">
@@ -96,31 +102,35 @@
               </div>
 
               <!-- isAllergic -->
-              <div class="input-group mb-1">
-                <div class="badge bg-light text-wrap fs-5 mb-2 text-muted" style="width: 10rem">
+              <div class="input-group mb-1 d-flex align-items-center">
+                <div class="badge bg-light text-wrap fs-5 mb-2 text-muted me-5 col-6">
                   Do you have any allergic?
                 </div>
-                <div class="form-check form-check-inline">
+
+                <div
+                  class="btn-group col-6 mb-1"
+                  role="group"
+                  aria-label="Basic radio toggle button group ">
                   <input
-                    class="form-check-input"
                     type="radio"
+                    class="btn-check"
+                    name="btnradio"
+                    id="btnradio3"
+                    autocomplete="off"
+                    data-th-field="*{isAllergic}"
                     value="true"
-                    id="dinner-radio3"
-                    data-th-field="*{isAllergic}" />
-                  <label class="form-check-label text-light" for="dinner-radio3">
-                    <p>Yes</p>
-                  </label>
-                </div>
-                <div class="form-check form-check-inline">
+                    checked />
+                  <label class="btn btn-outline-light" for="btnradio3">Yes</label>
+
                   <input
-                    class="form-check-input"
                     type="radio"
-                    value="false"
-                    id="dinner-radio4"
-                    data-th-field="*{isAllergic}" />
-                  <label class="form-check-label text-light" for="dinner-radio4">
-                    <p>No</p>
-                  </label>
+                    class="btn-check"
+                    name="btnradio"
+                    id="btnradio4"
+                    autocomplete="off"
+                    data-th-field="*{isAllergic}"
+                    value="false" />
+                  <label class="btn btn-outline-light" for="btnradio4">No</label>
                 </div>
               </div>
               <div class="mb-1">
@@ -132,19 +142,17 @@
               </div>
 
               <!-- allergicFood -->
-              <div class="input-group mb-1 mt-3">
-                <span class="input-group-text">Please specify your allergies.</span>
-                <input type="text" class="form-control" data-th-field="*{allergicFood}" />
-              </div>
-              <div class="mb-1">
-                <span
-                  class="error"
-                  data-th-if="${#fields.hasErrors('allergicFood')}"
-                  data-th-errors="*{allergicFood}">
-                </span>
+              <div class="form-floating mb-1 mt-3">
+                <textarea
+                  class="form-control"
+                  placeholder="Leave a comment here"
+                  id="floatingTextarea2"
+                  style="height: 100px"
+                  data-th-field="*{allergicFood}"></textarea>
+                <label for="floatingTextarea2">Please specify your allergies.</label>
               </div>
 
-              <div class="text-center">
+              <div class="text-center mt-3">
                 <button class="btn btn-outline-light" type="submit">Next</button>
               </div>
             </form>

@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="css/bootstrap.css" />
+    <title>Dinner</title>
+  </head>
+  <body class="context">
+    <section>
+      <div class="container-fluid context">
+        <div class="row d-flex justify-content-center align-items-center">
+          <div class="col-8">
+            <h1 class="my-5 py-3 text-light text-center" id="homeheader">
+              Register for Honeydew 20th Anniversary Dinner 🍴
+            </h1>
+          </div>
+          <div class="col-6">
+            <form
+              action=""
+              method="post"
+              data-th-action="@{/confirmDetails}"
+              data-th-object="${dinner}">
+              <!-- isAttending -->
+              <div class="input-group mb-1">
+                <div class="badge bg-light text-wrap fs-5 mb-2 text-muted" style="width: 10rem">
+                  Would you like to attend the dinner?
+                </div>
+                <div class="form-check form-check-inline">
+                  <input
+                    class="form-check-input"
+                    type="radio"
+                    value="true"
+                    id="dinner-radio1"
+                    data-th-field="*{isAttending}" />
+                  <label class="form-check-label text-light" for="dinner-radio1">
+                    <p>Yes 😃</p>
+                  </label>
+                </div>
+                <div class="form-check form-check-inline">
+                  <input
+                    class="form-check-input"
+                    type="radio"
+                    value="false"
+                    id="dinner-radio2"
+                    data-th-field="*{isAttending}" />
+                  <label class="form-check-label text-light" for="dinner-radio2">
+                    <p>No ☹️</p>
+                  </label>
+                </div>
+              </div>
+              <div class="mb-1">
+                <span
+                  class="error"
+                  data-th-if="${#fields.hasErrors('isAttending')}"
+                  data-th-errors="*{isAttending}">
+                </span>
+              </div>
+
+              <!-- isVegetarian -->
+              <div class="input-group mb-1">
+                <div class="badge bg-light text-wrap fs-5 mb-2 text-muted" style="width: 10rem">
+                  Are you a vegetarian/vegan?
+                </div>
+                <div class="form-check form-check-inline">
+                  <input
+                    class="form-check-input"
+                    type="radio"
+                    value="true"
+                    id="dinner-radio5"
+                    data-th-field="*{isVegetarian}" />
+                  <label class="form-check-label text-light" for="dinner-radio5">
+                    <p>Yes 🍅</p>
+                  </label>
+                </div>
+                <div class="form-check form-check-inline">
+                  <input
+                    class="form-check-input"
+                    type="radio"
+                    value="false"
+                    id="dinner-radio6"
+                    data-th-field="*{isVegetarian}" />
+                  <label class="form-check-label text-light" for="dinner-radio6">
+                    <p>No 🍖</p>
+                  </label>
+                </div>
+              </div>
+              <div class="mb-1">
+                <span
+                  class="error"
+                  data-th-if="${#fields.hasErrors('isVegetarian')}"
+                  data-th-errors="*{isVegetarian}">
+                </span>
+              </div>
+
+              <!-- isAllergic -->
+              <div class="input-group mb-1">
+                <div class="badge bg-light text-wrap fs-5 mb-2 text-muted" style="width: 10rem">
+                  Do you have any allergic?
+                </div>
+                <div class="form-check form-check-inline">
+                  <input
+                    class="form-check-input"
+                    type="radio"
+                    value="true"
+                    id="dinner-radio3"
+                    data-th-field="*{isAllergic}" />
+                  <label class="form-check-label text-light" for="dinner-radio3">
+                    <p>Yes</p>
+                  </label>
+                </div>
+                <div class="form-check form-check-inline">
+                  <input
+                    class="form-check-input"
+                    type="radio"
+                    value="false"
+                    id="dinner-radio4"
+                    data-th-field="*{isAllergic}" />
+                  <label class="form-check-label text-light" for="dinner-radio4">
+                    <p>No</p>
+                  </label>
+                </div>
+              </div>
+              <div class="mb-1">
+                <span
+                  class="error"
+                  data-th-if="${#fields.hasErrors('isAllergic')}"
+                  data-th-errors="*{isAllergic}">
+                </span>
+              </div>
+
+              <!-- allergicFood -->
+              <div class="input-group mb-1 mt-3">
+                <span class="input-group-text">Please specify your allergies.</span>
+                <input type="text" class="form-control" data-th-field="*{allergicFood}" />
+              </div>
+              <div class="mb-1">
+                <span
+                  class="error"
+                  data-th-if="${#fields.hasErrors('allergicFood')}"
+                  data-th-errors="*{allergicFood}">
+                </span>
+              </div>
+
+              <div class="text-center">
+                <button class="btn btn-outline-light" type="submit">Next</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </section>
+    <div class="area">
+      <ul class="circles">
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+      </ul>
+    </div>
+    <script src="/js/script.js"></script>
+    <script src="/js/bootstrap.js"></script>
+  </body>
+</html>

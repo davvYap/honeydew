@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="css/bootstrap.css" />
+    <title>Register</title>
+  </head>
+  <body class="context">
+    <section>
+      <div class="container-fluid context">
+        <div class="row d-flex justify-content-center align-items-center">
+          <div class="col-8">
+            <h1 class="my-5 py-3 text-light text-center" id="homeheader">
+              Register account as Honeydew Member 🍈
+            </h1>
+          </div>
+          <div class="col-6">
+            <form
+              action=""
+              method="post"
+              data-th-action="@{/nextRegistration}"
+              data-th-object="${member}">
+              <!-- name -->
+              <div class="input-group mb-1">
+                <span class="input-group-text">Name</span>
+                <input type="text" class="form-control" data-th-field="*{name}" />
+              </div>
+              <div class="mb-1">
+                <span
+                  class="error"
+                  data-th-if="${#fields.hasErrors('name')}"
+                  data-th-errors="*{name}">
+                </span>
+              </div>
+              <!-- batch -->
+              <div class="input-group mb-1 mt-3">
+                <span class="input-group-text">Batch</span>
+                <input
+                  type="text"
+                  class="form-control"
+                  data-th-field="*{batch}"
+                  placeholder="2015/16" />
+              </div>
+              <div class="mb-1">
+                <span
+                  class="error"
+                  data-th-if="${#fields.hasErrors('batch')}"
+                  data-th-errors="*{batch}">
+                </span>
+              </div>
+              <!-- phone number -->
+              <div class="input-group mb-1 mt-3">
+                <span class="input-group-text">Phone NO.</span>
+                <input type="text" class="form-control" data-th-field="*{phoneNum}" />
+              </div>
+              <div class="mb-1">
+                <span
+                  class="error"
+                  data-th-if="${#fields.hasErrors('phoneNum')}"
+                  data-th-errors="*{phoneNum}">
+                </span>
+              </div>
+              <!-- email -->
+              <div class="input-group mb-1 mt-3">
+                <span class="input-group-text">Email</span>
+                <input type="text" class="form-control" data-th-field="*{email}" />
+              </div>
+              <div class="mb-1">
+                <span
+                  class="error"
+                  data-th-if="${#fields.hasErrors('email')}"
+                  data-th-errors="*{email}">
+                </span>
+              </div>
+              <!-- date of birth -->
+              <div class="input-group mb-1 mt-3">
+                <span class="input-group-text">Date of Birth </span>
+                <input
+                  id="dateOfBirth"
+                  type="date"
+                  class="form-control"
+                  data-th-field="*{dateOfBirth}" />
+              </div>
+              <div class="mb-3">
+                <span
+                  class="error"
+                  data-th-if="${#fields.hasErrors('dateOfBirth')}"
+                  data-th-errors="*{dateOfBirth}">
+                </span>
+              </div>
+              <!-- city -->
+              <div class="input-group mb-1">
+                <span class="input-group-text">State/City</span>
+                <select
+                  data-th-field="*{city}"
+                  class="form-select"
+                  aria-label="Default select example">
+                  <option
+                    data-th-each=" city : ${cities}"
+                    data-th-value="${city}"
+                    data-th-text="${city.getState()}"></option>
+                  <option data-th-value="${Singapore}">Singapore</option>
+                  <option data-th-value="${Other}">Other</option>
+                </select>
+              </div>
+
+              <div class="mb-3">
+                <span
+                  class="error"
+                  data-th-if="${#fields.hasErrors('city')}"
+                  data-th-errors="*{city}">
+                </span>
+              </div>
+
+              <div class="text-center">
+                <button class="btn btn-outline-light" type="submit">Next</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </section>
+    <div class="area">
+      <ul class="circles">
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+      </ul>
+    </div>
+    <script src="/js/script.js"></script>
+    <script src="/js/bootstrap.js"></script>
+  </body>
+</html>

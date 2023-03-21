@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/bootstrap.css" />
+    <title>Honeydew Shirt</title>
+  </head>
+  <body>
+    <section>
+      <div class="container-fluid context">
+        <div class="row d-flex justify-content-center align-items-center">
+          <div class="col-6">
+            <h1 class="my-3 py-1 text-light text-center" id="homeheader">
+              Enter your details below:
+            </h1>
+          </div>
+        </div>
+        <div class="row d-flex justify-content-center align-items-center">
+          <div class="col-6 text-center">
+            <form
+              action="#"
+              method="POST"
+              data-th-action="@{/shirt/checkout/complete}"
+              data-th-object="${cart}">
+              <div class="input-group mb-1">
+                <span class="input-group-text">Select your profile</span>
+                <select
+                  data-th-field="*{member}"
+                  class="form-select"
+                  aria-label="Default select example">
+                  <option
+                    data-th-each=" member : ${members}"
+                    data-th-value="${member}"
+                    data-th-text="${member.getName()}"></option>
+                </select>
+              </div>
+              <div class="mb-1">
+                <span
+                  class="error"
+                  data-th-if="${#fields.hasErrors('member')}"
+                  data-th-errors="*{member}">
+                </span>
+              </div>
+
+              <div class="form-floating mb-1 mt-3">
+                <textarea
+                  class="form-control"
+                  placeholder="Leave your address here"
+                  id="floatingTextarea2"
+                  style="height: 100px"
+                  data-th-field="*{address}"></textarea>
+                <label for="floatingTextarea2">Please enter your address.</label>
+              </div>
+              <div class="mb-1">
+                <span
+                  class="error"
+                  data-th-if="${#fields.hasErrors('address')}"
+                  data-th-errors="*{address}">
+                </span>
+              </div>
+
+              <button type="submit" class="btn btn-primary mt-3">Next</button>
+            </form>
+
+            <div class="row d-flex justify-content-center align-items-center">
+              <div class="col-6">
+                <form method="GET" data-th-action="@{/shirt/cancel}">
+                  <button type="submit" class="btn btn-danger mt-3">Cancel</button>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <div class="area">
+      <ul class="circles">
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+      </ul>
+    </div>
+    <script src="/js/script.js"></script>
+    <script src="/js/bootstrap.js"></script>
+  </body>
+</html>

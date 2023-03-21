@@ -1,6 +1,7 @@
 package sg.edu.nus.iss.honeydew.service;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -60,6 +61,10 @@ public class HoneydewService {
             c = oc.get();
         }
         return c;
+    }
+
+    public List<Member> getAllMembers() throws IOException {
+        return honeyRepo.getAllMembers();
     }
 
     public void debugService(Member member, Dinner dinner) {

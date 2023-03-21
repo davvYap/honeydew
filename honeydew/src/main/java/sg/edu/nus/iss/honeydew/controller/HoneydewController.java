@@ -1,7 +1,7 @@
 package sg.edu.nus.iss.honeydew.controller;
 
 import java.io.IOException;
-
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -87,6 +87,7 @@ public class HoneydewController {
         return "welcome";
     }
 
+    // NOTE shirt ordering
     @GetMapping(path = "/shirt")
     public String purchaseShirt(Model model, @ModelAttribute Shirt shirt, HttpSession session) {
         Cart c = (Cart) session.getAttribute("cart");
@@ -97,6 +98,12 @@ public class HoneydewController {
         model.addAttribute("cart", c);
         model.addAttribute("shirt", shirt);
         return "shirt";
+    }
+
+    @GetMapping(path = "/shirt/cancel")
+    public String cancelShirtOrder(Model model, HttpSession session) {
+        session.invalidate();
+        return "index";
     }
 
     @PostMapping(path = "/shirt")
@@ -111,6 +118,16 @@ public class HoneydewController {
         model.addAttribute("cart", c);
         model.addAttribute("shirt", shirt);
         return "shirt";
+    }
+
+    @PostMapping(path = "/shirt/checkout")
+    public String checkoutCart(Model model, @ModelAttribute Cart cart, HttpSession session) throws IOException {
+        Cart c = (Cart) session.getAttribute("cart");
+        model.addAttribute("cart", c);
+
+        List<Member> members = honeySvc.getAllMembers();
+        model.addAttribute("members", members);
+        return "delivery";
     }
 
 }

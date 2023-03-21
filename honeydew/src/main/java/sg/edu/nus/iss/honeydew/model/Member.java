@@ -1,8 +1,12 @@
 package sg.edu.nus.iss.honeydew.model;
 
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.Period;
+import java.time.format.DateTimeFormatter;
 import java.util.UUID;
 
 import org.springframework.format.annotation.DateTimeFormat;
@@ -10,6 +14,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import jakarta.json.Json;
 import jakarta.json.JsonObject;
 import jakarta.json.JsonObjectBuilder;
+import jakarta.json.JsonReader;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
@@ -157,8 +162,27 @@ public class Member implements Serializable {
                 .add("city", this.getFinalCity())
                 .add("phone", this.getPhoneNum())
                 .add("email", this.getEmail())
-                .add("date of birth", this.getDateOfBirth().toString())
+                .add("date_of_birth", this.getDateOfBirth().toString())
                 .build();
+    }
+
+    public static Member createFromJSON(String json) throws IOException {
+        Member member = new Member();
+        try (InputStream is = new ByteArrayInputStream(json.getBytes())) {
+            JsonReader reader = Json.createReader(is);
+            JsonObject jsObj = reader.readObject();
+            member.setId(jsObj.getString("id"));
+            member.setName(jsObj.getString("name"));
+            member.setBatch(jsObj.getString("batch"));
+            member.setCity(jsObj.getString("city"));
+            member.setPhoneNum(jsObj.getString("phone"));
+            member.setEmail(jsObj.getString("email"));
+
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+            LocalDate dob = LocalDate.parse(jsObj.getString("date_of_birth"), formatter);
+            member.setDateOfBirth(dob);
+        }
+        return member;
     }
 
 }

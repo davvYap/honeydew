@@ -4,26 +4,119 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Shopping Cart</title>
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="css/bootstrap.css" />
+    <title>Honeydew Shirt</title>
   </head>
   <body>
-    <form action="#" method="POST" data-th-action="@{/shirt}" data-th-object="${shirt}">
-      <p>Shirt color:</p>
-      <input type="text" data-th-field="*{color}" />
+    <section>
+      <div class="container-fluid context">
+        <div class="row d-flex justify-content-center align-items-center">
+          <div class="col-6">
+            <h1 class="my-3 py-1 text-light text-center" id="homeheader">
+              Order your shirt below:
+            </h1>
+          </div>
+        </div>
+        <div class="row d-flex justify-content-center align-items-center">
+          <div class="col-6 text-center">
+            <form action="#" method="POST" data-th-action="@{/shirt}" data-th-object="${shirt}">
+              <div class="input-group mb-1">
+                <span class="input-group-text">Shirt Color</span>
+                <input type="text" class="form-control" data-th-field="*{color}" />
+              </div>
+              <div class="mb-1">
+                <span
+                  class="error"
+                  data-th-if="${#fields.hasErrors('color')}"
+                  data-th-errors="*{color}">
+                </span>
+              </div>
 
-      <p>Quantity:</p>
-      <input type="number" min="1" step="1" data-th-field="*{quantity}" />
-      <button type="submit">Add</button>
-    </form>
+              <div class="input-group mb-1 mt-3">
+                <span class="input-group-text">Size</span>
+                <select
+                  data-th-field="*{size}"
+                  class="form-select"
+                  aria-label="Default select example">
+                  <option selected data-th-value="M">XS</option>
+                  <option data-th-value="S">S</option>
+                  <option data-th-value="M">M</option>
+                  <option data-th-value="M">L</option>
+                  <option data-th-value="M">XL</option>
+                  <option data-th-value="M">XXL</option>
+                </select>
+              </div>
 
-    <div data-th-unless="${#lists.isEmpty(cart.items)}">
-      <div data-th-each="it: ${cart.items}" data-th-object="${it}">
-        <span data-th-text="*{color}"></span>
-        <span data-th-text="*{quantity}"></span>
+              <div class="input-group mb-1 mt-3">
+                <span class="input-group-text">Quantity</span>
+                <input
+                  type="number"
+                  min="1"
+                  step="1"
+                  class="form-control"
+                  data-th-field="*{quantity}" />
+              </div>
+              <div class="mb-1">
+                <span
+                  class="error"
+                  data-th-if="${#fields.hasErrors('quantity')}"
+                  data-th-errors="*{quantity}">
+                </span>
+              </div>
+              <button type="submit" class="btn btn-primary mt-3">Add</button>
+            </form>
+
+            <div data-th-unless="${#lists.isEmpty(cart.items)}">
+              <table class="table table-light mt-5">
+                <thead>
+                  <tr>
+                    <td scope="col">Shirt Color</td>
+                    <td scope="col">Size</td>
+                    <td scope="col">Quantity</td>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr data-th-each="item : ${cart.items}" data-th-object="${item}">
+                    <td scope="row" data-th-text="*{color}"></td>
+                    <td data-th-text="*{size}"></td>
+                    <td data-th-text="*{quantity}"></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="row d-flex justify-content-center align-items-center">
+              <div class="col-6">
+                <form method="GET" data-th-action="@{/shirt/cancel}">
+                  <button type="submit" class="btn btn-danger mt-3">Cancel</button>
+                </form>
+              </div>
+              <div class="col-6">
+                <form method="POST" data-th-action="@{/shirt/checkout}">
+                  <button type="submit" class="btn btn-success mt-3">Checkout</button>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
+    </section>
+    <div class="area">
+      <ul class="circles">
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+      </ul>
     </div>
-    <form method="GET" data-th-action="@{/shirt/checkout}">
-      <button type="submit">Checkout</button>
-    </form>
+    <script src="/js/script.js"></script>
+    <script src="/js/bootstrap.js"></script>
   </body>
 </html>

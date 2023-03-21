@@ -62,6 +62,23 @@
                   data-th-errors="*{isAttending}">
                 </span>
               </div>
+              <!-- numberOfAttedance -->
+              <div class="input-group mb-1 mt-3">
+                <span class="input-group-text" style="width: 12rem">Number of Attendees?</span>
+                <input
+                  type="number"
+                  class="form-control"
+                  data-th-field="*{numberOfAttendance}"
+                  placeholder="1" />
+              </div>
+              <div class="mb-1">
+                <span
+                  class="error"
+                  data-th-if="${#fields.hasErrors('numberOfAttendance')}"
+                  data-th-errors="*{numberOfAttendance}">
+                </span>
+              </div>
+
               <!-- isVegetarian -->
               <div class="input-group mb-1 row d-flex align-items-center my-3">
                 <div class="badge bg-light text-wrap fs-5 mb-2 text-muted me-5 col-6">

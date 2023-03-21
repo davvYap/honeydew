@@ -16,10 +16,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
+import sg.edu.nus.iss.honeydew.model.Cart;
 import sg.edu.nus.iss.honeydew.model.Cities;
 import sg.edu.nus.iss.honeydew.model.Dinner;
 import sg.edu.nus.iss.honeydew.model.DinnerMember;
 import sg.edu.nus.iss.honeydew.model.Member;
+import sg.edu.nus.iss.honeydew.model.Shirt;
 import sg.edu.nus.iss.honeydew.service.HoneydewService;
 
 @Controller
@@ -84,4 +86,31 @@ public class HoneydewController {
         model.addAttribute("name", member.getName());
         return "welcome";
     }
+
+    @GetMapping(path = "/shirt")
+    public String purchaseShirt(Model model, @ModelAttribute Shirt shirt, HttpSession session) {
+        Cart c = (Cart) session.getAttribute("cart");
+        if (c == null) {
+            c = new Cart();
+            session.setAttribute("cart", c);
+        }
+        model.addAttribute("cart", c);
+        model.addAttribute("shirt", shirt);
+        return "shirt";
+    }
+
+    @PostMapping(path = "/shirt")
+    public String purchaseShirt(Model model, @Valid Shirt shirt, BindingResult binding, HttpSession session) {
+        Cart c = (Cart) session.getAttribute("cart");
+        if (binding.hasErrors()) {
+            model.addAttribute("cart", c);
+            model.addAttribute("shirt", shirt);
+            return "shirt";
+        }
+        c.addItem(shirt);
+        model.addAttribute("cart", c);
+        model.addAttribute("shirt", shirt);
+        return "shirt";
+    }
+
 }

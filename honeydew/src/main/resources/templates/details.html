@@ -12,9 +12,6 @@
     <div class="container-fluid context">
       <div class="row mx-5 mt-5 d-flex justify-content-around">
         <span class="col-2 text-center">
-          <a href="/register/nextRegistration" class="btn btn-outline-light">Back</a>
-        </span>
-        <span class="col-2 text-center">
           <a href="/" class="btn btn-outline-light">Home</a>
         </span>
       </div>
@@ -60,6 +57,10 @@
               <tr>
                 <td>Attending the Dinner:</td>
                 <td data-th-text="${dinner.getIsAttending()}? 'Yes':'No'"></td>
+              </tr>
+              <tr>
+                <td>Number of Attendees:</td>
+                <td data-th-text="${dinner.getNumberOfAttendance()}"></td>
               </tr>
               <tr>
                 <td>Vegetarian:</td>

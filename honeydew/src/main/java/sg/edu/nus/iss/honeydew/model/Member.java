@@ -27,7 +27,9 @@ public class Member implements Serializable {
     private String batch;
 
     @NotNull(message = "Please select a city")
-    private City city;
+    private String city;
+
+    private String other;
 
     @NotNull(message = "Phone number cannot be null")
     @Pattern(regexp = "^\\+(?:[0-9] ?){6,14}[0-9]$", message = "Must be a valid phone number")
@@ -67,12 +69,20 @@ public class Member implements Serializable {
         this.batch = batch;
     }
 
-    public City getCity() {
+    public String getCity() {
         return city;
     }
 
-    public void setCity(City city) {
+    public void setCity(String city) {
         this.city = city;
+    }
+
+    public String getOther() {
+        return other;
+    }
+
+    public void setOther(String other) {
+        this.other = other;
     }
 
     public String getPhoneNum() {
@@ -121,23 +131,30 @@ public class Member implements Serializable {
         return id;
     }
 
-    public JsonObjectBuilder toJSON() {
+    public String getFinalCity() {
+        if (this.getCity().equalsIgnoreCase("Other")) {
+            return this.getOther();
+        }
+        return this.getCity();
+    }
+
+    public JsonObjectBuilder toJSONObjectBuilder() {
         return Json.createObjectBuilder()
                 .add("id", this.getId())
                 .add("name", this.getName())
                 .add("batch", this.getBatch())
-                .add("city", this.getCity().toJSON())
+                .add("city", this.getFinalCity())
                 .add("phone", this.getPhoneNum())
                 .add("email", this.getEmail())
                 .add("date of birth", this.getDateOfBirth().toString());
     }
 
-    public JsonObject toJSONObject() {
+    public JsonObject toJSON() {
         return Json.createObjectBuilder()
                 .add("id", this.getId())
                 .add("name", this.getName())
                 .add("batch", this.getBatch())
-                .add("city", this.getCity().toJSON())
+                .add("city", this.getFinalCity())
                 .add("phone", this.getPhoneNum())
                 .add("email", this.getEmail())
                 .add("date of birth", this.getDateOfBirth().toString())

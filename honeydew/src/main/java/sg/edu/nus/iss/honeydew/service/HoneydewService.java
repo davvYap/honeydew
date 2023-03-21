@@ -12,6 +12,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import sg.edu.nus.iss.honeydew.model.Cities;
+import sg.edu.nus.iss.honeydew.model.City;
+import sg.edu.nus.iss.honeydew.model.Dinner;
 import sg.edu.nus.iss.honeydew.model.DinnerMember;
 import sg.edu.nus.iss.honeydew.model.Member;
 import sg.edu.nus.iss.honeydew.repository.HoneydewRepository;
@@ -42,9 +44,35 @@ public class HoneydewService {
         Cities cities = Cities.createFromJSON(response.getBody());
 
         if (cities != null) {
+            for (City city : cities.getCities()) {
+                System.out.println("CITY >>>>>>>>>>>>>>>>>>>>>>>>" + city.getState());
+            }
             return Optional.of(cities);
         }
         return Optional.empty();
+    }
+
+    // convert to cities object and pass to controller
+    public Cities getCitiesFromOptional() throws IOException {
+        Cities c = new Cities();
+        Optional<Cities> oc = getCities();
+        if (oc != null) {
+            c = oc.get();
+        }
+        return c;
+    }
+
+    public void debugService(Member member, Dinner dinner) {
+        System.out.println("Member >>>>>>>>>>>>>>>>>>>>>>>>" + member);
+        System.out.println("Member ID >>>>>>>>>>>>>>>>>>>>>>>>" + member.getId());
+        System.out.println("Member name >>>>>>>>>>>>>>>>>>>>>>>>" + member.getName());
+        System.out.println("Member state >>>>>>>>>>>>>>>>>>>>>>>>>>" + member.getCity());
+        System.out.println("Member dob >>>>>>>>>>>>>>>>>>>>>>>>" + member.getDateOfBirth());
+        System.out.println("Member batch >>>>>>>>>>>>>>>>>>>>>>>>" + member.getBatch());
+        System.out.println("Member age >>>>>>>>>>>>>>>>>>>>>>>>" + member.getAge());
+        System.out.println("Member email >>>>>>>>>>>>>>>>>>>>>>>>" + member.getEmail());
+        System.out.println("Member JSON >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>" + member.toJSON().toString());
+        System.out.println("Dinner JSON >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>" + dinner.toJSON().toString());
     }
 
 }

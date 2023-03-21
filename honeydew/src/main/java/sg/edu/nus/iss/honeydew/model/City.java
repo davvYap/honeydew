@@ -50,7 +50,7 @@ public class City implements Serializable {
         return city;
     }
 
-    public JsonObjectBuilder toJSON() {
+    public JsonObjectBuilder toJSONObjectBuilder() {
         return Json.createObjectBuilder()
                 .add("state", this.getState())
                 .add("capital", this.getCapital())

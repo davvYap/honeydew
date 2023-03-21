@@ -104,10 +104,10 @@
                   aria-label="Default select example">
                   <option
                     data-th-each=" city : ${cities}"
-                    data-th-value="${city}"
+                    data-th-value="${city.getState()}"
                     data-th-text="${city.getState()}"></option>
-                  <option data-th-value="${Singapore}">Singapore</option>
-                  <option data-th-value="${Other}">Other</option>
+                  <option data-th-value="Singapore">Singapore</option>
+                  <option data-th-value="Other">Other</option>
                 </select>
               </div>
 
@@ -116,6 +116,19 @@
                   class="error"
                   data-th-if="${#fields.hasErrors('city')}"
                   data-th-errors="*{city}">
+                </span>
+              </div>
+
+              <!-- Other -->
+              <div class="input-group mb-1 mt-3">
+                <span class="input-group-text">Other</span>
+                <input type="text" class="form-control" data-th-field="*{other}" />
+              </div>
+              <div class="mb-1">
+                <span
+                  class="error"
+                  data-th-if="${#fields.hasErrors('other')}"
+                  data-th-errors="*{other}">
                 </span>
               </div>
 

@@ -17,7 +17,7 @@ public class Dinner implements Serializable {
     @NotNull(message = "Please select an option")
     private Boolean isAllergic = false;
 
-    private String allergicFood = "No allergic";
+    private String allergicFood;
 
     public Boolean getIsAttending() {
         return isAttending;
@@ -44,14 +44,17 @@ public class Dinner implements Serializable {
     }
 
     public String getAllergicFood() {
-        return allergicFood;
+        if (this.getIsAllergic()) {
+            return allergicFood;
+        }
+        return "No allergy";
     }
 
     public void setAllergicFood(String allergicFood) {
         this.allergicFood = allergicFood;
     }
 
-    public JsonObjectBuilder toJSON() {
+    public JsonObjectBuilder toJSONoObjectBuilder() {
         return Json.createObjectBuilder()
                 .add("is_attending", this.getIsAttending() ? "Yes" : "No")
                 .add("is_alergic", this.getIsAllergic() ? "Yes" : "No")
@@ -59,12 +62,12 @@ public class Dinner implements Serializable {
                 .add("allergic_food", this.getAllergicFood());
     }
 
-    public JsonObject toJSONObject() {
+    public JsonObject toJSON() {
         return Json.createObjectBuilder()
                 .add("is_attending", this.getIsAttending() ? "Yes" : "No")
                 .add("is_alergic", this.getIsAllergic() ? "Yes" : "No")
                 .add("is_vegetarian", this.getIsVegetarian() ? "Yes" : "No")
-                .add("allergic_food", this.getAllergicFood())
+                .add("allergic_food", this.getIsAllergic() ? this.getAllergicFood() : "No allergy")
                 .build();
     }
 

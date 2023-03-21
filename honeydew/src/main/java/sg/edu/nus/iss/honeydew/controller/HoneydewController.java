@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -16,7 +17,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import sg.edu.nus.iss.honeydew.model.Cities;
-import sg.edu.nus.iss.honeydew.model.City;
 import sg.edu.nus.iss.honeydew.model.Dinner;
 import sg.edu.nus.iss.honeydew.model.DinnerMember;
 import sg.edu.nus.iss.honeydew.model.Member;
@@ -32,15 +32,9 @@ public class HoneydewController {
     public String registerDinner(Model model, @ModelAttribute Member member, HttpSession session) throws IOException {
         session.invalidate();
         // retrieve cities from API
-        Cities c = new Cities();
-        Optional<Cities> oc = honeySvc.getCities();
-        if (oc != null) {
-            c = oc.get();
-        }
+        Cities c = honeySvc.getCitiesFromOptional();
         model.addAttribute("cities", c.getCities());
         model.addAttribute("member", member);
-        model.addAttribute("Singapore", new City("Singapore"));
-        model.addAttribute("Other", new City("Other"));
         return "member";
     }
 
@@ -48,15 +42,20 @@ public class HoneydewController {
     public String nextRegistration(Model model, HttpSession session, @Valid Member member, BindingResult binding,
             @ModelAttribute Dinner dinner) throws IOException {
         if (binding.hasErrors()) {
-            Cities c = new Cities();
-            Optional<Cities> oc = honeySvc.getCities();
-            if (oc != null) {
-                c = oc.get();
-            }
+            Cities c = honeySvc.getCitiesFromOptional();
             model.addAttribute("cities", c.getCities());
-            model.addAttribute("Singapore", new City("Singapore"));
-            model.addAttribute("Other", new City("Other"));
             return "member";
+        }
+        // check if user select other as state/city and enter own city at 'other'
+        // section
+        if (member.getCity().equalsIgnoreCase("Other")) {
+            if (member.getOther().isEmpty() || member.getOther().isBlank()) {
+                FieldError fe = new FieldError("member", "other", "Cannot leave blank for other section");
+                binding.addError(fe);
+                Cities c = honeySvc.getCitiesFromOptional();
+                model.addAttribute("cities", c.getCities());
+                return "member";
+            }
         }
         session.setAttribute("member", member);
         model.addAttribute("dinner", dinner);
@@ -70,18 +69,8 @@ public class HoneydewController {
         }
         Member member = (Member) session.getAttribute("member");
         session.setAttribute("dinner", dinner);
-        System.out.println("Member >>>>>>>>>>>>>>>>>>>>>>>>" + member);
-        System.out.println("Member ID >>>>>>>>>>>>>>>>>>>>>>>>" + member.getId());
-        System.out.println("Member name >>>>>>>>>>>>>>>>>>>>>>>>" + member.getName());
-        System.out.println("Member state >>>>>>>>>>>>>>>>>>>>>>>>>>" + member.getCity().getState());
-        System.out.println("Member dob >>>>>>>>>>>>>>>>>>>>>>>>" + member.getDateOfBirth());
-        System.out.println("Member batch >>>>>>>>>>>>>>>>>>>>>>>>" + member.getBatch());
-        System.out.println("Member age >>>>>>>>>>>>>>>>>>>>>>>>" + member.getAge());
-        System.out.println("Member email >>>>>>>>>>>>>>>>>>>>>>>>" + member.getEmail());
-        System.out.println("Dinner >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>" + dinner.toJSONObject().toString());
         model.addAttribute("member", member);
         model.addAttribute("dinner", dinner);
-        model.addAttribute("state", member.getCity().getState());
         return "details";
     }
 

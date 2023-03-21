@@ -24,6 +24,10 @@
           <div class="table-responsive">
             <table class="table table-light" data-th-object="${member}">
               <tr>
+                <td>ID:</td>
+                <td data-th-text="*{id}"></td>
+              </tr>
+              <tr>
                 <td>Name:</td>
                 <td data-th-text="*{name}"></td>
               </tr>
@@ -33,7 +37,7 @@
               </tr>
               <tr>
                 <td>State/City:</td>
-                <td data-th-text="${state}"></td>
+                <td data-th-text="${member.getFinalCity()}"></td>
               </tr>
               <tr>
                 <td>Phone Number:</td>

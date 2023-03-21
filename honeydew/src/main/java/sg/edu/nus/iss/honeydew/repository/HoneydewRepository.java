@@ -19,10 +19,13 @@ public class HoneydewRepository {
     private String DINNER_DATABASE = "dinner_database";
 
     public void saveMember(Member member) {
-        redisTemplate.opsForHash().put(MEMBER_DATABASE, member.getId(), member.toJSONObject().toString());
+        // redisTemplate.opsForValue().set(member.getName(),
+        // member.toJSON().toString());
+        redisTemplate.opsForHash().put(MEMBER_DATABASE, member.getId(),
+                member.toJSON().toString());
     }
 
     public void saveDinnerDetails(DinnerMember dm) {
-        redisTemplate.opsForHash().put(DINNER_DATABASE, dm.getMember().getId(), dm.toJSON());
+        redisTemplate.opsForHash().put(DINNER_DATABASE, dm.getMember().getId(), dm.toJSON().toString());
     }
 }

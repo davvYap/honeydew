@@ -47,8 +47,11 @@ public class RedisConfig {
         RedisTemplate<String, String> r = new RedisTemplate<>();
         r.setConnectionFactory(jedisFac);
         r.setKeySerializer(new StringRedisSerializer());
-        r.setKeySerializer(new StringRedisSerializer());
+        r.setValueSerializer(new StringRedisSerializer());
         // r.setValueSerializer(r.getKeySerializer());
+
+        r.setHashKeySerializer(new StringRedisSerializer());
+        r.setHashValueSerializer(new StringRedisSerializer());
 
         System.out.println("Redishost >>> " + redisHost);
         return r;

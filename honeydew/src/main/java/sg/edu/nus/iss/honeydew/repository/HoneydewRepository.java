@@ -45,4 +45,8 @@ public class HoneydewRepository {
         return members;
     }
 
+    public Member getMemberById(String id) {
+        return (Member) redisTemplate.opsForHash().get(MEMBER_DATABASE, id);
+    }
+
 }

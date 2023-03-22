@@ -3,6 +3,7 @@ package sg.edu.nus.iss.honeydew.model;
 import java.io.Serializable;
 
 import jakarta.json.Json;
+import jakarta.json.JsonObject;
 import jakarta.json.JsonObjectBuilder;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
@@ -23,13 +24,15 @@ public class Shirt extends Item implements Serializable {
     @Max(value = 10, message = "Maximum quantity is 10")
     private int quantity;
 
+    private double price;
+
     // name parent class properties => Item class
     public Shirt() {
         this.setName("shirt");
     }
 
     public String getColor() {
-        return color;
+        return color.toUpperCase();
     }
 
     public void setColor(String color) {
@@ -52,11 +55,28 @@ public class Shirt extends Item implements Serializable {
         this.quantity = quantity;
     }
 
+    public double getPrice() {
+        return price;
+    }
+
+    public void setPrice(double price) {
+        this.price = price;
+    }
+
     public JsonObjectBuilder toJSONObjectBuilder() {
         return Json.createObjectBuilder()
                 .add("color", this.getColor())
                 .add("size", this.getSize())
-                .add("quantity", this.getQuantity());
+                .add("quantity", this.getQuantity())
+                .add("price", this.getPrice());
+    }
+
+    public static Shirt createFromJSON(JsonObject jsObj) {
+        Shirt shirt = new Shirt();
+        shirt.setColor(jsObj.getString("color"));
+        shirt.setSize(jsObj.getString("size"));
+        shirt.setPrice(jsObj.getJsonNumber("price").doubleValue());
+        return shirt;
     }
 
 }

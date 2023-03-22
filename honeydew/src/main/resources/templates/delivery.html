@@ -28,20 +28,20 @@
               <div class="input-group mb-1">
                 <span class="input-group-text" style="width: 10rem">Select your profile</span>
                 <select
-                  data-th-field="*{member}"
+                  data-th-field="*{memberId}"
                   class="form-select"
                   aria-label="Default select example">
                   <option
                     data-th-each=" member : ${members}"
-                    data-th-value="${member}"
+                    data-th-value="${member.getId()}"
                     data-th-text="${member.getName()}"></option>
                 </select>
               </div>
               <div class="mb-1">
                 <span
                   class="error"
-                  data-th-if="${#fields.hasErrors('member')}"
-                  data-th-errors="*{member}">
+                  data-th-if="${#fields.hasErrors('memberId')}"
+                  data-th-errors="*{memberId}">
                 </span>
               </div>
 
@@ -62,11 +62,41 @@
                 </span>
               </div>
 
-              <button type="submit" class="btn btn-primary mt-3">Next</button>
+              <button type="submit" class="btn btn-success mt-3">Order</button>
             </form>
 
-            <div class="row d-flex justify-content-center align-items-center">
+            <div class="row d-flex justify-content-center align-items-center mt-3">
               <div class="col-6">
+                <h3 class="custom-header">Confirm your shirt order below:</h3>
+              </div>
+            </div>
+
+            <div data-th-unless="${#lists.isEmpty(cart.items)}">
+              <table class="table table-light mt-3">
+                <thead>
+                  <tr>
+                    <td scope="col">Shirt Color</td>
+                    <td scope="col">Size</td>
+                    <td scope="col">Quantity</td>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr data-th-each="item : ${cart.items}" data-th-object="${item}">
+                    <td scope="row" data-th-text="*{color}"></td>
+                    <td data-th-text="*{size}"></td>
+                    <td data-th-text="*{quantity}"></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="row d-flex justify-content-center align-items-center">
+              <div class="col-3">
+                <form method="GET" data-th-action="@{/shirt}">
+                  <button type="submit" class="btn btn-primary mt-3">Back</button>
+                </form>
+              </div>
+              <div class="col-3">
                 <form method="GET" data-th-action="@{/shirt/cancel}">
                   <button type="submit" class="btn btn-danger mt-3">Cancel</button>
                 </form>

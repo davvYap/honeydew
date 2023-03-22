@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/bootstrap.css" />
+    <title>Honeydew Shirt</title>
+  </head>
+  <body>
+    <section>
+      <div class="container-fluid context">
+        <div class="row d-flex justify-content-center align-items-center">
+          <div class="col-6">
+            <h1 class="my-3 py-1 text-light text-center" id="homeheader">
+              Invoice : <span data-th-text="${quotations.getQuoteId()}"></span>
+            </h1>
+          </div>
+        </div>
+
+        <table class="table table-light mt-3">
+          <thead>
+            <tr>
+              <td scope="col">Shirt Color</td>
+              <td scope="col">Size</td>
+              <!-- <td scope="col">Quantity</td> -->
+              <td scope="col">Price</td>
+            </tr>
+          </thead>
+          <tbody>
+            <tr data-th-each="shirt : ${quotations.getQuotations()}" data-th-object="${shirt}">
+              <td scope="row" data-th-text="${shirt.getColor()}"></td>
+              <td data-th-text="${shirt.getSize()}"></td>
+              <!-- <td data-th-text="*{quantity}"></td> -->
+              <td data-th-text="${shirt.getPrice()}"></td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="row d-flex justify-content-center align-items-center">
+          <div class="col-3">
+            <form method="GET" data-th-action="@{/shirt}">
+              <button type="submit" class="btn btn-primary mt-3">Back</button>
+            </form>
+          </div>
+          <div class="col-3">
+            <form method="GET" data-th-action="@{/shirt/cancel}">
+              <button type="submit" class="btn btn-danger mt-3">Cancel</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </section>
+    <div class="area">
+      <ul class="circles">
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+      </ul>
+    </div>
+    <script src="/js/script.js"></script>
+    <script src="/js/bootstrap.js"></script>
+  </body>
+</html>

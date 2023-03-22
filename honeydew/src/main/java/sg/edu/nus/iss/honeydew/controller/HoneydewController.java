@@ -9,6 +9,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -21,6 +22,7 @@ import sg.edu.nus.iss.honeydew.model.Cities;
 import sg.edu.nus.iss.honeydew.model.Dinner;
 import sg.edu.nus.iss.honeydew.model.DinnerMember;
 import sg.edu.nus.iss.honeydew.model.Member;
+import sg.edu.nus.iss.honeydew.model.Quotations;
 import sg.edu.nus.iss.honeydew.model.Shirt;
 import sg.edu.nus.iss.honeydew.service.HoneydewService;
 
@@ -87,7 +89,13 @@ public class HoneydewController {
         return "welcome";
     }
 
-    // NOTE shirt ordering
+    @GetMapping(path = "/shirt/cancel")
+    public String cancelShirtOrder(Model model, HttpSession session) {
+        session.invalidate();
+        return "index";
+    }
+
+    // NOTE back button from delivery view
     @GetMapping(path = "/shirt")
     public String purchaseShirt(Model model, @ModelAttribute Shirt shirt, HttpSession session) {
         Cart c = (Cart) session.getAttribute("cart");
@@ -100,12 +108,6 @@ public class HoneydewController {
         return "shirt";
     }
 
-    @GetMapping(path = "/shirt/cancel")
-    public String cancelShirtOrder(Model model, HttpSession session) {
-        session.invalidate();
-        return "index";
-    }
-
     @PostMapping(path = "/shirt")
     public String purchaseShirt(Model model, @Valid Shirt shirt, BindingResult binding, HttpSession session) {
         Cart c = (Cart) session.getAttribute("cart");
@@ -114,6 +116,19 @@ public class HoneydewController {
             model.addAttribute("shirt", shirt);
             return "shirt";
         }
+
+        // validate shirt color
+        List<ObjectError> errors = honeySvc.validateShirtOrder(shirt);
+        if (!errors.isEmpty()) {
+            System.out.println("Color has error!");
+            for (ObjectError objectError : errors) {
+                binding.addError(objectError);
+            }
+            model.addAttribute("cart", c);
+            model.addAttribute("shirt", shirt);
+            return "shirt";
+        }
+
         c.addItem(shirt);
         model.addAttribute("cart", c);
         model.addAttribute("shirt", shirt);
@@ -121,14 +136,57 @@ public class HoneydewController {
     }
 
     @PostMapping(path = "/shirt/checkout")
-    public String checkoutCart(Model model, @ModelAttribute Cart cart, HttpSession session,
-            BindingResult binding)
+    public String checkoutCart(Model model, HttpSession session, @ModelAttribute Cart cart)
             throws IOException {
         Cart c = (Cart) session.getAttribute("cart");
-        model.addAttribute("cart", c);
+
+        // NOTE check if cart is empty or missing
+        if (c == null || c.getItems().isEmpty()) {
+            c = new Cart();
+            session.setAttribute("cart", c);
+            model.addAttribute("cart", c);
+            model.addAttribute("shirt", new Shirt());
+            return "shirt";
+        }
+
+        // NOTE cause we need to bind the cart model to thymeleaf, thus we have to give
+        // the items list from c to cart
+        cart.setItems(c.getItems());
+        model.addAttribute("cart", cart);
         List<Member> members = honeySvc.getAllMembers();
         model.addAttribute("members", members);
         return "delivery";
+    }
+
+    @PostMapping(path = "/shirt/checkout/complete")
+    public String completeCheckout(Model model, HttpSession session, @ModelAttribute @Valid Cart cart,
+            BindingResult binding)
+            throws IOException {
+        Cart c = (Cart) session.getAttribute("cart");
+
+        // NOTE from here we pass back the binded model cart to c
+        c.setMemberId(cart.getMemberId());
+        c.setAddress(cart.getAddress());
+        System.out.println("items >>>>>>>>>>>>>>>" + c.getItems());
+        System.out.println("Member >>>>>>>>>>>>>>>> " + c.getMemberId());
+        System.out.println("Address >>>>>>>>>>>>>>>> " + c.getAddress());
+
+        if (c.getAddress() == null || c.getAddress().isEmpty() ||
+                c.getAddress().isBlank()) {
+            System.out.println("Cart has error!");
+            FieldError fe = new FieldError("cart", "address", "Address cannot be empty");
+            binding.addError(fe);
+            model.addAttribute("cart", c);
+            List<Member> members = honeySvc.getAllMembers();
+            model.addAttribute("members", members);
+            return "delivery";
+        }
+
+        // handle object error generated from rest api endpoint when giving the invoice
+        // create quotation class to retrieve shirt cost based on json string
+        Quotations quotations = honeySvc.getQuotations(c).get();
+        model.addAttribute("quotations", quotations);
+        return "invoice";
     }
 
 }

@@ -5,6 +5,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import jakarta.json.Json;
+import jakarta.json.JsonArray;
 import jakarta.json.JsonArrayBuilder;
 import jakarta.json.JsonObject;
 import jakarta.json.JsonObjectBuilder;
@@ -13,9 +14,8 @@ import jakarta.validation.constraints.NotNull;
 
 public class Cart implements Serializable {
 
-    @NotNull(message = "Name cannot be null")
-    @NotEmpty(message = "Name cannot be empty")
-    private Member member;
+    @NotNull(message = "Profile cannot be null")
+    private String memberId;
 
     @NotNull(message = "Address cannot be null")
     @NotEmpty(message = "Address cannot be empty")
@@ -24,20 +24,22 @@ public class Cart implements Serializable {
     @NotEmpty(message = "Must at least add one item")
     private List<Item> items = new LinkedList<>();
 
+    private double totalCost;
+
+    public String getMemberId() {
+        return memberId;
+    }
+
+    public void setMemberId(String memberId) {
+        this.memberId = memberId;
+    }
+
     public List<Item> getItems() {
         return items;
     }
 
     public void setItems(List<Item> items) {
         this.items = items;
-    }
-
-    public Member getMember() {
-        return member;
-    }
-
-    public void setMember(Member member) {
-        this.member = member;
     }
 
     public String getAddress() {
@@ -52,8 +54,15 @@ public class Cart implements Serializable {
         this.items.add(item);
     }
 
-    public JsonObject toJSON() {
+    public double getTotalCost() {
+        return totalCost;
+    }
 
+    public void setTotalCost(double totalCost) {
+        this.totalCost = totalCost;
+    }
+
+    public JsonObject toJSON() {
         JsonArrayBuilder arrBuilder = Json.createArrayBuilder();
         List<JsonObjectBuilder> listOfItems = this.getItems().stream()
                 .map(item -> (Shirt) item)
@@ -64,11 +73,26 @@ public class Cart implements Serializable {
         }
 
         return Json.createObjectBuilder()
-                .add("name", this.getMember().getName())
+                .add("member_id", this.getMemberId())
                 .add("address", this.getAddress())
-                .add("phone_number", this.getMember().getPhoneNum())
-                .add("email", this.getMember().getEmail())
                 .add("items", arrBuilder)
+                .add("total_cost", this.getTotalCost())
                 .build();
     }
+
+    // to pass to honeydew_server as json array
+    public JsonArray toJSONArray() {
+        JsonArrayBuilder arrBuilder = Json.createArrayBuilder();
+        List<JsonObjectBuilder> listOfItems = this.getItems().stream()
+                .map(item -> (Shirt) item)
+                .map(item -> item.toJSONObjectBuilder())
+                .toList();
+        for (JsonObjectBuilder jsonObjectBuilder : listOfItems) {
+            arrBuilder.add(jsonObjectBuilder);
+        }
+        return Json.createArrayBuilder()
+                .add(arrBuilder)
+                .build();
+    }
+
 }

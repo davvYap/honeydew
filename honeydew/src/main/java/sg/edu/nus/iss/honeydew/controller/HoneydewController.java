@@ -121,10 +121,11 @@ public class HoneydewController {
     }
 
     @PostMapping(path = "/shirt/checkout")
-    public String checkoutCart(Model model, @ModelAttribute Cart cart, HttpSession session) throws IOException {
+    public String checkoutCart(Model model, @ModelAttribute Cart cart, HttpSession session,
+            BindingResult binding)
+            throws IOException {
         Cart c = (Cart) session.getAttribute("cart");
         model.addAttribute("cart", c);
-
         List<Member> members = honeySvc.getAllMembers();
         model.addAttribute("members", members);
         return "delivery";

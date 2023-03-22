@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="/css/style.css" />
-    <link rel="stylesheet" href="css/bootstrap.css" />
+    <link rel="stylesheet" href="/css/bootstrap.css" />
     <title>Honeydew Shirt</title>
   </head>
   <body>
@@ -66,6 +66,24 @@
               </div>
               <button type="submit" class="btn btn-primary mt-3">Add</button>
             </form>
+            <div class="row d-flex justify-content-center align-items-center">
+              <div class="col-6">
+                <form method="GET" data-th-action="@{/shirt/cancel}">
+                  <button type="submit" class="btn btn-danger mt-3">Cancel</button>
+                </form>
+              </div>
+            </div>
+
+            <div data-th-if="${#lists.isEmpty(cart.items)}">
+              <table class="table table-light mt-5" data-th-object="${cart}">
+                <tr>
+                  <td>Your cart is currently empty</td>
+                </tr>
+                <tr data-th-if="${#fields.hasErrors('items')}">
+                  <td data-th-errors="*{items}"></td>
+                </tr>
+              </table>
+            </div>
 
             <div data-th-unless="${#lists.isEmpty(cart.items)}">
               <table class="table table-light mt-5">
@@ -85,13 +103,9 @@
                 </tbody>
               </table>
             </div>
-
-            <div class="row d-flex justify-content-center align-items-center">
-              <div class="col-6">
-                <form method="GET" data-th-action="@{/shirt/cancel}">
-                  <button type="submit" class="btn btn-danger mt-3">Cancel</button>
-                </form>
-              </div>
+            <div
+              class="row d-flex justify-content-center align-items-center"
+              data-th-unless="${#lists.isEmpty(cart.items)}">
               <div class="col-6">
                 <form method="POST" data-th-action="@{/shirt/checkout}">
                   <button type="submit" class="btn btn-success mt-3">Checkout</button>

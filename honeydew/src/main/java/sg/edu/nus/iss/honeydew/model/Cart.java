@@ -21,6 +21,7 @@ public class Cart implements Serializable {
     @NotEmpty(message = "Address cannot be empty")
     private String address;
 
+    @NotEmpty(message = "Must at least add one item")
     private List<Item> items = new LinkedList<>();
 
     public List<Item> getItems() {

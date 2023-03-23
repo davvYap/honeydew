@@ -19,7 +19,7 @@
         <div class="my-3 col-5">
           <h1 class="h1 my-3 text-light text-center">Please confirm your details</h1>
           <div class="table-responsive">
-            <table class="table table-light" data-th-object="${member}">
+            <table class="table table-light table-hover" data-th-object="${member}">
               <tr>
                 <td>ID:</td>
                 <td data-th-text="*{id}"></td>
@@ -53,7 +53,7 @@
                 <td data-th-text="*{age}"></td>
               </tr>
             </table>
-            <table class="table table-light" data-th-object="${dinner}">
+            <table class="table table-light table-hover" data-th-object="${dinner}">
               <tr>
                 <td>Attending the Dinner:</td>
                 <td data-th-text="${dinner.getIsAttending()}? 'Yes':'No'"></td>
@@ -85,7 +85,11 @@
             </span> -->
             <span class="col-2 text-center">
               <form data-th-action="@{/confirmed}" method="post">
-                <button type="submit" class="btn btn-outline-light" style="width: 6rem">
+                <button
+                  type="submit"
+                  class="btn btn-outline-light"
+                  style="width: 6rem"
+                  onclick="return confirm('Do you want to proceed to the next page?')">
                   Submit
                 </button>
               </form>

@@ -43,6 +43,17 @@ public class HoneydewController {
         return "member";
     }
 
+    // NOTE back button from dinner view
+    @GetMapping(path = "/member")
+    public String registerMember(Model model, @ModelAttribute Member member, HttpSession session) throws IOException {
+        Member m = (Member) session.getAttribute("member");
+        member = Member.createFromMember(m);
+        Cities c = honeySvc.getCitiesFromOptional();
+        model.addAttribute("cities", c.getCities());
+        model.addAttribute("member", member);
+        return "member";
+    }
+
     @PostMapping(path = "/register/nextRegistration")
     public String nextRegistration(Model model, HttpSession session, @Valid Member member, BindingResult binding,
             @ModelAttribute Dinner dinner) throws IOException {
@@ -138,7 +149,8 @@ public class HoneydewController {
             return "shirt";
         }
 
-        c.addItem(shirt);
+        // c.addItem(shirt);
+        c.setItems(honeySvc.addItems(c, shirt));
         model.addAttribute("cart", c);
         model.addAttribute("shirt", shirt);
         return "shirt";

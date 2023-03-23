@@ -46,6 +46,28 @@ public class Cart implements Serializable {
     }
 
     public void addItem(Item item) {
+        // if (this.items.size() != 0) {
+        // int newQuantity = 0;
+        // Shirt newShirt = (Shirt) item;
+        // for (Item i : this.items) {
+        // Shirt existingShirt = (Shirt) i;
+        // if (existingShirt.getColor().equalsIgnoreCase(newShirt.getColor())
+        // && existingShirt.getSize().equalsIgnoreCase(newShirt.getSize())) {
+        // System.out.println("Same color and same size!");
+        // newQuantity += (existingShirt.getQuantity() + newShirt.getQuantity());
+        // this.items.remove(existingShirt);
+        // System.out.println("Item remove >>>>>>>>> " + existingShirt.getColor() +
+        // existingShirt.getSize()
+        // + existingShirt.getQuantity());
+        // System.out.println("Items list length >>>>>>>>>>>>>" + this.items.size());
+        // } else {
+        // System.out.println("Different color and quantity!");
+        // this.items.add(item);
+        // }
+        // }
+        // newShirt.setQuantity(newQuantity);
+        // this.items.add(newShirt);
+        // }
         this.items.add(item);
     }
 

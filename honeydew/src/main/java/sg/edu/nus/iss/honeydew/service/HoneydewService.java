@@ -107,10 +107,38 @@ public class HoneydewService {
         return errors;
     }
 
+    // aggregate similar items with similar color and size
+    public List<Item> addItems(Cart c, Item item) {
+        List<Item> items = c.getItems();
+
+        if (items.size() == 0) {
+            items.add(item);
+            return items;
+        }
+
+        Shirt newShirt = (Shirt) item;
+        for (Item i : items) {
+            Shirt existingShirt = (Shirt) i;
+            if (existingShirt.getColor().equalsIgnoreCase(newShirt.getColor())
+                    && existingShirt.getSize().equalsIgnoreCase(newShirt.getSize())) {
+                int newQuantity = existingShirt.getQuantity() + newShirt.getQuantity();
+                newShirt.setQuantity(newQuantity);
+                items.remove(existingShirt);
+                items.add(newShirt);
+                return items;
+            }
+        }
+
+        items.add(item);
+        return items;
+    }
+
     // call honeydew_server get quotations
     public Optional<Quotations> getQuotations(Cart cart) throws IOException {
 
         String url = "http://localhost:3000/api/quotation";
+        // String url =
+        // "https://honeydewserver-production.up.railway.app/api/quotation";
 
         // determine what to post -> JsonArray
         JsonArray cartJSON = cart.toJSONarray();

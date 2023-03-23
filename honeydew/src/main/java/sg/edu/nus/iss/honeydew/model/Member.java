@@ -143,6 +143,19 @@ public class Member implements Serializable {
         return this.getCity();
     }
 
+    public static Member createFromMember(Member m) {
+        Member member = new Member();
+        member.setName(m.getName());
+        member.setBatch(m.getBatch());
+        member.setCity(m.getCity());
+        member.setDateOfBirth(m.getDateOfBirth());
+        member.setId(m.getId());
+        member.setOther(m.getOther());
+        member.setPhoneNum(m.getPhoneNum());
+        member.setEmail(m.getEmail());
+        return member;
+    }
+
     public JsonObjectBuilder toJSONObjectBuilder() {
         return Json.createObjectBuilder()
                 .add("id", this.getId())

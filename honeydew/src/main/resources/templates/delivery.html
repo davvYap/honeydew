@@ -24,7 +24,7 @@
               action="#"
               method="POST"
               data-th-action="@{/shirt/checkout/complete}"
-              data-th-object="${cart}">
+              data-th-object="${po}">
               <div class="input-group mb-1">
                 <span class="input-group-text" style="width: 10rem">Select your profile</span>
                 <select
@@ -72,7 +72,7 @@
             </div>
 
             <div data-th-unless="${#lists.isEmpty(cart.items)}">
-              <table class="table table-light mt-3">
+              <table class="table table-light table-hover mt-3">
                 <thead>
                   <tr>
                     <td scope="col">Shirt Color</td>

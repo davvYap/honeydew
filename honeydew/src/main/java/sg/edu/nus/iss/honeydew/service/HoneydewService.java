@@ -17,14 +17,15 @@ import org.springframework.validation.FieldError;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.client.RestTemplate;
 
-import com.google.gson.JsonObject;
-
 import jakarta.json.JsonArray;
+import jakarta.json.JsonObject;
+import jakarta.json.JsonObjectBuilder;
 import sg.edu.nus.iss.honeydew.model.Cart;
 import sg.edu.nus.iss.honeydew.model.Cities;
 import sg.edu.nus.iss.honeydew.model.City;
 import sg.edu.nus.iss.honeydew.model.Dinner;
 import sg.edu.nus.iss.honeydew.model.DinnerMember;
+import sg.edu.nus.iss.honeydew.model.Item;
 import sg.edu.nus.iss.honeydew.model.Member;
 import sg.edu.nus.iss.honeydew.model.Quotations;
 import sg.edu.nus.iss.honeydew.model.Shirt;
@@ -82,7 +83,7 @@ public class HoneydewService {
         return honeyRepo.getAllMembers();
     }
 
-    public Member getMemberById(String id) {
+    public Member getMemberById(String id) throws IOException {
         return honeyRepo.getMemberById(id);
     }
 
@@ -112,13 +113,20 @@ public class HoneydewService {
         String url = "http://localhost:3000/api/quotation";
 
         // determine what to post -> JsonArray
-        JsonArray jsArr = cart.toJSONArray();
+        JsonArray cartJSON = cart.toJSONarray();
         RequestEntity req = RequestEntity.post(url)
                 .contentType(MediaType.APPLICATION_JSON)
-                .body(jsArr.toString(), String.class);
+                .body(cartJSON.toString(), String.class);
 
         RestTemplate template = new RestTemplate();
-        ResponseEntity<String> res = template.exchange(req, String.class);
+
+        ResponseEntity<String> res;
+        // in case http server issue
+        try {
+            res = template.exchange(req, String.class);
+        } catch (Exception e) {
+            throw e;
+        }
 
         Quotations quotations = Quotations.createFromJSON(res.getBody());
         if (quotations != null) {
@@ -127,17 +135,35 @@ public class HoneydewService {
         return Optional.empty();
     }
 
-    public void debugService(Member member, Dinner dinner) {
-        System.out.println("Member >>>>>>>>>>>>>>>>>>>>>>>>" + member);
-        System.out.println("Member ID >>>>>>>>>>>>>>>>>>>>>>>>" + member.getId());
-        System.out.println("Member name >>>>>>>>>>>>>>>>>>>>>>>>" + member.getName());
-        System.out.println("Member state >>>>>>>>>>>>>>>>>>>>>>>>>>" + member.getCity());
-        System.out.println("Member dob >>>>>>>>>>>>>>>>>>>>>>>>" + member.getDateOfBirth());
-        System.out.println("Member batch >>>>>>>>>>>>>>>>>>>>>>>>" + member.getBatch());
-        System.out.println("Member age >>>>>>>>>>>>>>>>>>>>>>>>" + member.getAge());
-        System.out.println("Member email >>>>>>>>>>>>>>>>>>>>>>>>" + member.getEmail());
-        System.out.println("Member JSON >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>" + member.toJSON().toString());
-        System.out.println("Dinner JSON >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>" + dinner.toJSON().toString());
+    // calculate total cost
+    public double getTotalCost(Quotations q, Cart c) {
+
+        c.setInvoiceId(q.getQuoteId());
+        double total = 0;
+        for (Item item : c.getItems()) {
+            Shirt shirt = (Shirt) item;
+            int quantity = shirt.getQuantity();
+            for (Shirt qShirt : q.getQuotations()) {
+                if (shirt.getColor().equalsIgnoreCase(qShirt.getColor())
+                        && shirt.getSize().equalsIgnoreCase(qShirt.getSize())) {
+                    qShirt.setQuantity(quantity);
+                    total += qShirt.getQuantity() * qShirt.getPrice();
+                }
+            }
+        }
+        return total;
     }
 
+    // calculate total shirt quantity
+    public int getTotalQuantity(Quotations q) {
+        int total = 0;
+        for (Shirt shirt : q.getQuotations()) {
+            total += shirt.getQuantity();
+        }
+        return total;
+    }
+
+    public void saveShirtOrder(Cart c) {
+        honeyRepo.saveShirtOrder(c);
+    }
 }

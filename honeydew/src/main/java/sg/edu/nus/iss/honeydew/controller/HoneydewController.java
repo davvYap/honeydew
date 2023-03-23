@@ -22,6 +22,7 @@ import sg.edu.nus.iss.honeydew.model.Cities;
 import sg.edu.nus.iss.honeydew.model.Dinner;
 import sg.edu.nus.iss.honeydew.model.DinnerMember;
 import sg.edu.nus.iss.honeydew.model.Member;
+import sg.edu.nus.iss.honeydew.model.PO;
 import sg.edu.nus.iss.honeydew.model.Quotations;
 import sg.edu.nus.iss.honeydew.model.Shirt;
 import sg.edu.nus.iss.honeydew.service.HoneydewService;
@@ -71,6 +72,14 @@ public class HoneydewController {
         if (binding.hasErrors()) {
             return "dinner";
         }
+
+        // check if attending dinner but number is 0
+        if (dinner.getIsAttending() && dinner.getNumberOfAttendance() == 0) {
+            FieldError fe = new FieldError("dinner", "numberOfAttendance", "Cannot have 0 attendees");
+            binding.addError(fe);
+            return "dinner";
+        }
+
         Member member = (Member) session.getAttribute("member");
         session.setAttribute("dinner", dinner);
         model.addAttribute("member", member);
@@ -136,7 +145,7 @@ public class HoneydewController {
     }
 
     @PostMapping(path = "/shirt/checkout")
-    public String checkoutCart(Model model, HttpSession session, @ModelAttribute Cart cart)
+    public String checkoutCart(Model model, HttpSession session, @ModelAttribute PO po)
             throws IOException {
         Cart c = (Cart) session.getAttribute("cart");
 
@@ -149,43 +158,44 @@ public class HoneydewController {
             return "shirt";
         }
 
-        // NOTE cause we need to bind the cart model to thymeleaf, thus we have to give
-        // the items list from c to cart
-        cart.setItems(c.getItems());
-        model.addAttribute("cart", cart);
+        model.addAttribute("cart", c);
+        model.addAttribute("po", po);
         List<Member> members = honeySvc.getAllMembers();
         model.addAttribute("members", members);
         return "delivery";
     }
 
     @PostMapping(path = "/shirt/checkout/complete")
-    public String completeCheckout(Model model, HttpSession session, @ModelAttribute @Valid Cart cart,
+    public String completeCheckout(Model model, HttpSession session, @ModelAttribute @Valid PO po,
             BindingResult binding)
             throws IOException {
         Cart c = (Cart) session.getAttribute("cart");
 
-        // NOTE from here we pass back the binded model cart to c
-        c.setMemberId(cart.getMemberId());
-        c.setAddress(cart.getAddress());
-        System.out.println("items >>>>>>>>>>>>>>>" + c.getItems());
-        System.out.println("Member >>>>>>>>>>>>>>>> " + c.getMemberId());
-        System.out.println("Address >>>>>>>>>>>>>>>> " + c.getAddress());
-
-        if (c.getAddress() == null || c.getAddress().isEmpty() ||
-                c.getAddress().isBlank()) {
-            System.out.println("Cart has error!");
-            FieldError fe = new FieldError("cart", "address", "Address cannot be empty");
-            binding.addError(fe);
+        if (binding.hasErrors()) {
+            System.out.println("PO has error!");
             model.addAttribute("cart", c);
+            model.addAttribute("po", po);
             List<Member> members = honeySvc.getAllMembers();
             model.addAttribute("members", members);
             return "delivery";
         }
 
-        // handle object error generated from rest api endpoint when giving the invoice
+        c.setPo(po);
+
         // create quotation class to retrieve shirt cost based on json string
         Quotations quotations = honeySvc.getQuotations(c).get();
+        Double totalCost = honeySvc.getTotalCost(quotations, c);
+        int numberOfShirts = honeySvc.getTotalQuantity(quotations);
+        String memberName = honeySvc.getMemberById(po.getMemberId()).getName();
+        String deliveryAddress = po.getAddress();
         model.addAttribute("quotations", quotations);
+        model.addAttribute("numberOfShirts", numberOfShirts);
+        model.addAttribute("total", totalCost);
+        model.addAttribute("memberName", memberName);
+        model.addAttribute("deliveryAddress", deliveryAddress);
+
+        honeySvc.saveShirtOrder(c);
+
         return "invoice";
     }
 

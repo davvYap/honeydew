@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Repository;
 
+import sg.edu.nus.iss.honeydew.model.Cart;
 import sg.edu.nus.iss.honeydew.model.DinnerMember;
 import sg.edu.nus.iss.honeydew.model.Member;
 
@@ -21,6 +22,8 @@ public class HoneydewRepository {
     private String MEMBER_DATABASE = "member_database";
 
     private String DINNER_DATABASE = "dinner_database";
+
+    private String SHIRT_DATABASE = "shirt_database";
 
     public void saveMember(Member member) {
         // redisTemplate.opsForValue().set(member.getName(),
@@ -45,8 +48,12 @@ public class HoneydewRepository {
         return members;
     }
 
-    public Member getMemberById(String id) {
-        return (Member) redisTemplate.opsForHash().get(MEMBER_DATABASE, id);
+    public Member getMemberById(String id) throws IOException {
+        return Member.createFromJSON((String) redisTemplate.opsForHash().get(MEMBER_DATABASE, id));
+    }
+
+    public void saveShirtOrder(Cart c) {
+        redisTemplate.opsForHash().put(SHIRT_DATABASE, c.getInvoiceId(), c.toJSON().toString());
     }
 
 }

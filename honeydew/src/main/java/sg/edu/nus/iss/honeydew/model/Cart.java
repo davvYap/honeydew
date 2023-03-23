@@ -14,24 +14,27 @@ import jakarta.validation.constraints.NotNull;
 
 public class Cart implements Serializable {
 
-    @NotNull(message = "Profile cannot be null")
-    private String memberId;
+    private String invoiceId;
 
-    @NotNull(message = "Address cannot be null")
-    @NotEmpty(message = "Address cannot be empty")
-    private String address;
+    private PO po;
 
     @NotEmpty(message = "Must at least add one item")
     private List<Item> items = new LinkedList<>();
 
-    private double totalCost;
-
-    public String getMemberId() {
-        return memberId;
+    public String getInvoiceId() {
+        return invoiceId;
     }
 
-    public void setMemberId(String memberId) {
-        this.memberId = memberId;
+    public void setInvoiceId(String invoiceId) {
+        this.invoiceId = invoiceId;
+    }
+
+    public PO getPo() {
+        return po;
+    }
+
+    public void setPo(PO po) {
+        this.po = po;
     }
 
     public List<Item> getItems() {
@@ -42,24 +45,8 @@ public class Cart implements Serializable {
         this.items = items;
     }
 
-    public String getAddress() {
-        return address;
-    }
-
-    public void setAddress(String address) {
-        this.address = address;
-    }
-
     public void addItem(Item item) {
         this.items.add(item);
-    }
-
-    public double getTotalCost() {
-        return totalCost;
-    }
-
-    public void setTotalCost(double totalCost) {
-        this.totalCost = totalCost;
     }
 
     public JsonObject toJSON() {
@@ -73,15 +60,16 @@ public class Cart implements Serializable {
         }
 
         return Json.createObjectBuilder()
-                .add("member_id", this.getMemberId())
-                .add("address", this.getAddress())
+                .add("invoiceId", this.invoiceId)
+                .add("member_id", this.po.getMemberId())
+                .add("address", this.po.getAddress())
                 .add("items", arrBuilder)
-                .add("total_cost", this.getTotalCost())
+                .add("total_cost", this.po.getTotalCost())
                 .build();
     }
 
     // to pass to honeydew_server as json array
-    public JsonArray toJSONArray() {
+    public JsonArray toJSONarray() {
         JsonArrayBuilder arrBuilder = Json.createArrayBuilder();
         List<JsonObjectBuilder> listOfItems = this.getItems().stream()
                 .map(item -> (Shirt) item)
@@ -90,9 +78,8 @@ public class Cart implements Serializable {
         for (JsonObjectBuilder jsonObjectBuilder : listOfItems) {
             arrBuilder.add(jsonObjectBuilder);
         }
-        return Json.createArrayBuilder()
-                .add(arrBuilder)
-                .build();
+        // to pass to only array
+        return arrBuilder.build();
     }
 
 }

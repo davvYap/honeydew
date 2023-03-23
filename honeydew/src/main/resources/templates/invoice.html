@@ -14,39 +14,55 @@
         <div class="row d-flex justify-content-center align-items-center">
           <div class="col-6">
             <h1 class="my-3 py-1 text-light text-center" id="homeheader">
-              Invoice : <span data-th-text="${quotations.getQuoteId()}"></span>
+              Invoice ID : <span data-th-text="${quotations.getQuoteId()}"></span>
             </h1>
+
+            <table class="table table-info table-hover mt-3">
+              <tr>
+                <td>Name</td>
+                <td data-th-text="${memberName}"></td>
+              </tr>
+              <tr>
+                <td>Address</td>
+                <td data-th-text="${deliveryAddress}"></td>
+              </tr>
+              <tr>
+                <td>Total</td>
+                <td data-th-text="${total}"></td>
+              </tr>
+            </table>
+
+            <table class="table table-light table-hover mt-3">
+              <thead>
+                <tr>
+                  <td scope="col">Shirt Color</td>
+                  <td scope="col">Size</td>
+                  <td scope="col">Quantity</td>
+                  <td scope="col">Price</td>
+                </tr>
+              </thead>
+              <tbody>
+                <tr data-th-each="shirt : ${quotations.getQuotations()}" data-th-object="${shirt}">
+                  <td scope="row" data-th-text="${shirt.getColor()}"></td>
+                  <td data-th-text="${shirt.getSize()}"></td>
+                  <td data-th-text="${shirt.getQuantity()}"></td>
+                  <td data-th-text="'$' + ${shirt.getPrice()*shirt.getQuantity()}"></td>
+                </tr>
+                <tr class="fw-bold">
+                  <td>TOTAL</td>
+                  <td>👕</td>
+                  <td data-th-text="${numberOfShirts} + ' pieces'"></td>
+                  <td data-th-text="'$' + ${total}"></td>
+                </tr>
+              </tbody>
+            </table>
           </div>
         </div>
 
-        <table class="table table-light mt-3">
-          <thead>
-            <tr>
-              <td scope="col">Shirt Color</td>
-              <td scope="col">Size</td>
-              <!-- <td scope="col">Quantity</td> -->
-              <td scope="col">Price</td>
-            </tr>
-          </thead>
-          <tbody>
-            <tr data-th-each="shirt : ${quotations.getQuotations()}" data-th-object="${shirt}">
-              <td scope="row" data-th-text="${shirt.getColor()}"></td>
-              <td data-th-text="${shirt.getSize()}"></td>
-              <!-- <td data-th-text="*{quantity}"></td> -->
-              <td data-th-text="${shirt.getPrice()}"></td>
-            </tr>
-          </tbody>
-        </table>
-
         <div class="row d-flex justify-content-center align-items-center">
-          <div class="col-3">
-            <form method="GET" data-th-action="@{/shirt}">
-              <button type="submit" class="btn btn-primary mt-3">Back</button>
-            </form>
-          </div>
-          <div class="col-3">
+          <div class="col-3 text-center">
             <form method="GET" data-th-action="@{/shirt/cancel}">
-              <button type="submit" class="btn btn-danger mt-3">Cancel</button>
+              <button type="submit" class="btn btn-primary mt-3">Home</button>
             </form>
           </div>
         </div>

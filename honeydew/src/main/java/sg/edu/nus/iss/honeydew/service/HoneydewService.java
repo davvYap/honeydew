@@ -1,6 +1,7 @@
 package sg.edu.nus.iss.honeydew.service;
 
 import java.io.IOException;
+import java.util.Calendar;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
@@ -193,5 +194,11 @@ public class HoneydewService {
 
     public void saveShirtOrder(Cart c) {
         honeyRepo.saveShirtOrder(c);
+    }
+
+    // get hour of the day
+    public int getTime() {
+        Calendar cal = Calendar.getInstance();
+        return cal.get(Calendar.HOUR_OF_DAY);
     }
 }

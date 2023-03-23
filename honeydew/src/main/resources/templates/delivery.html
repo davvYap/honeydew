@@ -54,6 +54,12 @@
                   data-th-field="*{address}"></textarea>
                 <label for="floatingTextarea2">Please enter your address.</label>
               </div>
+              <div class="mb-1" data-th-if="${#fields.hasErrors()}">
+                <p
+                  class="error"
+                  data-th-each="err: ${#fields.errors('poError')}"
+                  data-th-text="${err}"></p>
+              </div>
               <div class="mb-1">
                 <span
                   class="error"

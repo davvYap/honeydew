@@ -159,7 +159,7 @@ public class Member implements Serializable {
     public JsonObjectBuilder toJSONObjectBuilder() {
         return Json.createObjectBuilder()
                 .add("id", this.getId())
-                .add("name", this.getName())
+                .add("name", this.getName().toUpperCase())
                 .add("batch", this.getBatch())
                 .add("city", this.getFinalCity())
                 .add("phone", this.getPhoneNum())
@@ -170,7 +170,7 @@ public class Member implements Serializable {
     public JsonObject toJSON() {
         return Json.createObjectBuilder()
                 .add("id", this.getId())
-                .add("name", this.getName())
+                .add("name", this.getName().toUpperCase())
                 .add("batch", this.getBatch())
                 .add("city", this.getFinalCity())
                 .add("phone", this.getPhoneNum())

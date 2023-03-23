@@ -105,7 +105,9 @@ public class HoneydewController {
         DinnerMember dm = new DinnerMember(member, dinner);
         honeySvc.saveMember(member);
         honeySvc.saveDinnerDetails(dm);
+        int currTime = honeySvc.getTime();
         model.addAttribute("name", member.getName());
+        model.addAttribute("currTime", currTime);
         return "welcome";
     }
 
@@ -185,6 +187,17 @@ public class HoneydewController {
 
         if (binding.hasErrors()) {
             System.out.println("PO has error!");
+            model.addAttribute("cart", c);
+            model.addAttribute("po", po);
+            List<Member> members = honeySvc.getAllMembers();
+            model.addAttribute("members", members);
+            return "delivery";
+        }
+
+        // semantic check
+        if (po.getAddress().isBlank() || po.getAddress().isEmpty()) {
+            ObjectError err = new ObjectError("poError", "Address cannot be empty");
+            binding.addError(err);
             model.addAttribute("cart", c);
             model.addAttribute("po", po);
             List<Member> members = honeySvc.getAllMembers();

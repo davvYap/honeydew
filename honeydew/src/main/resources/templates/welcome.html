@@ -13,6 +13,12 @@
       <div class="container-fluid context">
         <div class="row d-flex justify-content-center align-items-center">
           <div class="col-6">
+            <div data-th-if="${currTime le 12}">
+              <h1 class="my-5 py-3 text-light text-center" id="homeheader">Good Morning 🌞</h1>
+            </div>
+            <div data-th-if="${currTime ge 12}">
+              <h1 class="my-5 py-3 text-light text-center" id="homeheader">Good Evening 🌛</h1>
+            </div>
             <h1 class="my-5 py-3 text-light text-center" id="homeheader">
               Welcome <span data-th-text="${name}"></span> !
             </h1>

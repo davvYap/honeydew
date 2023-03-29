@@ -153,6 +153,7 @@ public class HoneydewService {
         // in case http server issue
         try {
             res = template.exchange(req, String.class);
+
         } catch (Exception e) {
             throw e;
         }

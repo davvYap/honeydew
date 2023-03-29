@@ -53,6 +53,10 @@ public class Member implements Serializable {
 
     private String id;
 
+    public String password;
+
+    private String confirmPassword;
+
     // constructor with ID
     public Member() {
         this.id = generateId();
@@ -110,6 +114,22 @@ public class Member implements Serializable {
         return dateOfBirth;
     }
 
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public String getConfirmPassword() {
+        return confirmPassword;
+    }
+
+    public void setConfirmPassword(String confirmPassword) {
+        this.confirmPassword = confirmPassword;
+    }
+
     public void setDateOfBirth(LocalDate dateOfBirth) {
         this.dateOfBirth = dateOfBirth;
         int calculateAge = 0;
@@ -153,6 +173,7 @@ public class Member implements Serializable {
         member.setOther(m.getOther());
         member.setPhoneNum(m.getPhoneNum());
         member.setEmail(m.getEmail());
+        member.setPassword(m.getPassword());
         return member;
     }
 
@@ -164,7 +185,8 @@ public class Member implements Serializable {
                 .add("city", this.getFinalCity())
                 .add("phone", this.getPhoneNum())
                 .add("email", this.getEmail())
-                .add("date of birth", this.getDateOfBirth().toString());
+                .add("date of birth", this.getDateOfBirth().toString())
+                .add("password", this.getPassword());
     }
 
     public JsonObject toJSON() {
@@ -176,6 +198,7 @@ public class Member implements Serializable {
                 .add("phone", this.getPhoneNum())
                 .add("email", this.getEmail())
                 .add("date_of_birth", this.getDateOfBirth().toString())
+                .add("password", this.getPassword())
                 .build();
     }
 
@@ -190,6 +213,7 @@ public class Member implements Serializable {
             member.setCity(jsObj.getString("city"));
             member.setPhoneNum(jsObj.getString("phone"));
             member.setEmail(jsObj.getString("email"));
+            member.setPassword(jsObj.getString("password"));
 
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
             LocalDate dob = LocalDate.parse(jsObj.getString("date_of_birth"), formatter);

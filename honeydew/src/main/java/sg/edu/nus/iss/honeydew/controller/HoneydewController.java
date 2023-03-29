@@ -21,6 +21,7 @@ import sg.edu.nus.iss.honeydew.model.Cart;
 import sg.edu.nus.iss.honeydew.model.Cities;
 import sg.edu.nus.iss.honeydew.model.Dinner;
 import sg.edu.nus.iss.honeydew.model.DinnerMember;
+import sg.edu.nus.iss.honeydew.model.Login;
 import sg.edu.nus.iss.honeydew.model.Member;
 import sg.edu.nus.iss.honeydew.model.PO;
 import sg.edu.nus.iss.honeydew.model.Quotations;
@@ -33,14 +34,74 @@ public class HoneydewController {
     @Autowired
     private HoneydewService honeySvc;
 
-    @GetMapping(path = "/register")
-    public String registerDinner(Model model, @ModelAttribute Member member, HttpSession session) throws IOException {
+    @GetMapping(path = "/signUp")
+    public String signUpAccount(Model model, @ModelAttribute Member member, HttpSession session) throws IOException {
         session.invalidate();
-        // retrieve cities from API
         Cities c = honeySvc.getCitiesFromOptional();
         model.addAttribute("cities", c.getCities());
         model.addAttribute("member", member);
         return "member";
+    }
+
+    @PostMapping(path = "/signUp")
+    public String completeSignUpAccount(Model model, HttpSession session, @Valid Member member, BindingResult binding)
+            throws IOException {
+        if (binding.hasErrors()) {
+            Cities c = honeySvc.getCitiesFromOptional();
+            model.addAttribute("cities", c.getCities());
+            return "member";
+        }
+        // check if user select other as state/city and enter own city at 'other'
+        // section
+        if (member.getCity().equalsIgnoreCase("Other")) {
+            if (member.getOther().isEmpty() || member.getOther().isBlank()) {
+                FieldError fe = new FieldError("member", "other", "Cannot leave blank for other section");
+                binding.addError(fe);
+                Cities c = honeySvc.getCitiesFromOptional();
+                model.addAttribute("cities", c.getCities());
+                return "member";
+            }
+        }
+        session.setAttribute("member", member);
+        model.addAttribute("name", member.getName());
+        model.addAttribute("login", true);
+        return "index";
+    }
+
+    @GetMapping(path = { "/home", "/" })
+    public String getHome(Model model, HttpSession session, @ModelAttribute Login login) {
+        // check if current status is login or not
+        Member member = (Member) session.getAttribute("member");
+        if (member != null) {
+            System.out.println("Member is login!");
+            model.addAttribute("islogin", true);
+            model.addAttribute("name", member.getName());
+            return "index";
+        }
+        System.out.println("Member not login!");
+        model.addAttribute("login", login);
+        model.addAttribute("islogin", false);
+        return "index";
+    }
+
+    @PostMapping(path = "/login")
+    public String login(Model model, HttpSession session, @ModelAttribute Login login, BindingResult binding) {
+        // IMPORTANT till here
+        return "index";
+    }
+
+    @GetMapping(path = "/logout")
+    public String logout(HttpSession session) {
+        session.invalidate();
+        return "index";
+    }
+
+    // register dinner
+    @GetMapping(path = "/register")
+    public String registerDinner(Model model, @ModelAttribute Dinner dinner, HttpSession session) throws IOException {
+        // session.invalidate();
+        model.addAttribute("dinner", dinner);
+        return "dinner";
     }
 
     // NOTE back button from dinner view

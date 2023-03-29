@@ -2,6 +2,10 @@ body {
   margin: auto;
 }
 
+.navbar {
+  z-index: 1;
+}
+
 #homeheader {
   font-size: 70px;
   font-weight: 600;
@@ -44,7 +48,7 @@ body {
 .context {
   width: 100%;
   position: absolute;
-  z-index: 99;
+  z-index: 1;
 }
 
 .context h1 {
@@ -65,6 +69,7 @@ body {
   background: -webkit-linear-gradient(to left, #8ffbaa, #71c84e);
   width: 100%;
   height: 100vh;
+  z-index: -1;
 }
 
 .circles {

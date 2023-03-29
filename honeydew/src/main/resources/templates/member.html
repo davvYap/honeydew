@@ -9,6 +9,17 @@
     <title>Register</title>
   </head>
   <body class="context">
+    <nav>
+      <nav class="navbar navbar-dark bg-dark">
+        <div class="container-fluid">
+          <a href="/" class="navbar-brand ms-2">Home</a>
+          <form class="d-flex">
+            <a href="/login" class="btn btn-outline-success me-2" role="button">Login</a>
+            <a href="/signUp" class="btn btn-sm btn-outline-secondary" role="button">Sign Up</a>
+          </form>
+        </div>
+      </nav>
+    </nav>
     <section>
       <div class="container-fluid context">
         <div class="row d-flex justify-content-center align-items-center">
@@ -18,11 +29,7 @@
             </h1>
           </div>
           <div class="col-6">
-            <form
-              action=""
-              method="post"
-              data-th-action="@{/register/nextRegistration}"
-              data-th-object="${member}">
+            <form action="" method="post" data-th-action="@{/signUp}" data-th-object="${member}">
               <!-- name -->
               <div class="input-group mb-1">
                 <span class="input-group-text">Name</span>
@@ -79,6 +86,23 @@
                   data-th-errors="*{email}">
                 </span>
               </div>
+              <!-- Passwod -->
+              <div class="input-group mb-1 mt-3">
+                <span class="input-group-text">Password</span>
+                <input type="password" class="form-control" data-th-field="*{password}" />
+              </div>
+              <div class="input-group mb-1 mt-3">
+                <span class="input-group-text">Confirm Password</span>
+                <input type="password" class="form-control" data-th-field="*{confirmPassword}" />
+              </div>
+              <div class="mb-1">
+                <span
+                  class="error"
+                  data-th-if="${#fields.hasErrors('password')}"
+                  data-th-errors="*{password}">
+                </span>
+              </div>
+
               <!-- date of birth -->
               <div class="input-group mb-1 mt-3">
                 <span class="input-group-text">Date of Birth </span>
@@ -133,7 +157,7 @@
               </div>
 
               <div class="text-center mt-3">
-                <button class="btn btn-outline-light" type="submit">Next</button>
+                <button class="btn btn-outline-light" type="submit">Sign Up</button>
               </div>
             </form>
             <div class="row d-flex justify-content-center align-items-center">

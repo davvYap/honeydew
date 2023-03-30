@@ -2,14 +2,11 @@ package sg.edu.nus.iss.honeydew.service;
 
 import java.io.IOException;
 import java.util.Calendar;
-import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
 import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
@@ -19,14 +16,12 @@ import org.springframework.validation.ObjectError;
 import org.springframework.web.client.RestTemplate;
 
 import jakarta.json.JsonArray;
-import jakarta.json.JsonObject;
-import jakarta.json.JsonObjectBuilder;
 import sg.edu.nus.iss.honeydew.model.Cart;
 import sg.edu.nus.iss.honeydew.model.Cities;
 import sg.edu.nus.iss.honeydew.model.City;
-import sg.edu.nus.iss.honeydew.model.Dinner;
 import sg.edu.nus.iss.honeydew.model.DinnerMember;
 import sg.edu.nus.iss.honeydew.model.Item;
+import sg.edu.nus.iss.honeydew.model.Login;
 import sg.edu.nus.iss.honeydew.model.Member;
 import sg.edu.nus.iss.honeydew.model.Quotations;
 import sg.edu.nus.iss.honeydew.model.Shirt;
@@ -84,8 +79,12 @@ public class HoneydewService {
         return honeyRepo.getAllMembers();
     }
 
-    public Member getMemberById(String id) throws IOException {
-        return honeyRepo.getMemberById(id);
+    public Optional<Member> getMemberByEmail(String email) throws IOException {
+        return honeyRepo.getMemberByEmail(email);
+    }
+
+    public boolean authenticateLogin(Login login) throws IOException {
+        return honeyRepo.authenticateLogin(login);
     }
 
     // validate shirt colors to ensure can safely call honeydew_server quotation

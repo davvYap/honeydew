@@ -44,9 +44,26 @@
               id="homeheader">
               Welcome to Honeydew Website
             </h1>
-            <h1 data-th-if="${islogin}" class="my-3 py-1 text-light text-center" id="homeheader">
-              Welcome <span data-th-text="${name}"></span> 😃
-            </h1>
+            <div data-th-if="${islogin}">
+              <h1
+                data-th-if="${currTime le 12}"
+                class="my-3 py-1 text-light text-center"
+                id="homeheader">
+                Good Morning <span data-th-text="${name}"></span> 🌞
+              </h1>
+              <h1
+                data-th-if="${currTime ge 12 and currTime le 18}"
+                class="my-3 py-1 text-light text-center"
+                id="homeheader">
+                Good Afternoon <span data-th-text="${name}"></span> 🌞
+              </h1>
+              <h1
+                data-th-if="${currTime ge 18}"
+                class="my-3 py-1 text-light text-center"
+                id="homeheader">
+                Good Evening <span data-th-text="${name}"></span> 🌛
+              </h1>
+            </div>
           </div>
         </div>
         <div class="row d-flex justify-content-center align-items-center">
@@ -129,5 +146,6 @@
     </div>
     <script src="/js/script.js"></script>
     <script src="/js/bootstrap.js"></script>
+    <script data-th-if="${loginAlert}" src="/js/login.js"></script>
   </body>
 </html>

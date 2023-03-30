@@ -34,6 +34,24 @@ public class HoneydewController {
     @Autowired
     private HoneydewService honeySvc;
 
+    @GetMapping(path = { "/home", "/" })
+    public String getHome(Model model, HttpSession session, @ModelAttribute Login login) {
+        // check if current status is login or not
+        Member member = (Member) session.getAttribute("member");
+        if (member != null) {
+            System.out.println("Member is login!");
+            int currTime = honeySvc.getTime();
+            model.addAttribute("currTime", currTime);
+            model.addAttribute("islogin", true);
+            model.addAttribute("name", member.getName());
+            return "index";
+        }
+        System.out.println("Member not login!");
+        model.addAttribute("login", login);
+        model.addAttribute("islogin", false);
+        return "index";
+    }
+
     @GetMapping(path = "/signUp")
     public String signUpAccount(Model model, @ModelAttribute Member member, HttpSession session) throws IOException {
         session.invalidate();
@@ -44,7 +62,8 @@ public class HoneydewController {
     }
 
     @PostMapping(path = "/signUp")
-    public String completeSignUpAccount(Model model, HttpSession session, @Valid Member member, BindingResult binding)
+    public String completeSignUpAccount(Model model, HttpSession session, @Valid Member member, BindingResult binding,
+            @ModelAttribute Login login)
             throws IOException {
         if (binding.hasErrors()) {
             Cities c = honeySvc.getCitiesFromOptional();
@@ -62,86 +81,64 @@ public class HoneydewController {
                 return "member";
             }
         }
+
+        // check if password is consistent
+        if (!member.getPassword().equals(member.getConfirmPassword())) {
+            FieldError fe = new FieldError("member", "password", "Password not consistent");
+            binding.addError(fe);
+            Cities c = honeySvc.getCitiesFromOptional();
+            model.addAttribute("cities", c.getCities());
+            return "member";
+        }
+        honeySvc.saveMember(member);
         session.setAttribute("member", member);
         model.addAttribute("name", member.getName());
-        model.addAttribute("login", true);
-        return "index";
-    }
-
-    @GetMapping(path = { "/home", "/" })
-    public String getHome(Model model, HttpSession session, @ModelAttribute Login login) {
-        // check if current status is login or not
-        Member member = (Member) session.getAttribute("member");
-        if (member != null) {
-            System.out.println("Member is login!");
-            model.addAttribute("islogin", true);
-            model.addAttribute("name", member.getName());
-            return "index";
-        }
-        System.out.println("Member not login!");
+        model.addAttribute("islogin", true);
         model.addAttribute("login", login);
-        model.addAttribute("islogin", false);
         return "index";
     }
 
     @PostMapping(path = "/login")
-    public String login(Model model, HttpSession session, @ModelAttribute Login login, BindingResult binding) {
-        // IMPORTANT till here
+    public String login(Model model, HttpSession session, @ModelAttribute Login login, BindingResult binding)
+            throws IOException {
+        if (honeySvc.authenticateLogin(login)) {
+            System.out.println("Member authenticated!");
+            Member m = honeySvc.getMemberByEmail(login.getEmail()).get();
+            session.setAttribute("member", m);
+            int currTime = honeySvc.getTime();
+            model.addAttribute("currTime", currTime);
+            model.addAttribute("islogin", true);
+            model.addAttribute("name", m.getName());
+            return "index";
+        }
+        System.out.println("Member not authenticated!");
+        model.addAttribute("login", login);
+        model.addAttribute("islogin", false);
+        model.addAttribute("loginAlert", true);
         return "index";
     }
 
     @GetMapping(path = "/logout")
-    public String logout(HttpSession session) {
+    public String logout(Model model, HttpSession session, @ModelAttribute Login login) {
         session.invalidate();
+        model.addAttribute("login", login);
         return "index";
     }
 
     // register dinner
     @GetMapping(path = "/register")
     public String registerDinner(Model model, @ModelAttribute Dinner dinner, HttpSession session) throws IOException {
-        // session.invalidate();
-        model.addAttribute("dinner", dinner);
-        return "dinner";
-    }
-
-    // NOTE back button from dinner view
-    @GetMapping(path = "/member")
-    public String registerMember(Model model, @ModelAttribute Member member, HttpSession session) throws IOException {
         Member m = (Member) session.getAttribute("member");
-        member = Member.createFromMember(m);
-        Cities c = honeySvc.getCitiesFromOptional();
-        model.addAttribute("cities", c.getCities());
-        model.addAttribute("member", member);
-        return "member";
-    }
-
-    @PostMapping(path = "/register/nextRegistration")
-    public String nextRegistration(Model model, HttpSession session, @Valid Member member, BindingResult binding,
-            @ModelAttribute Dinner dinner) throws IOException {
-        if (binding.hasErrors()) {
-            Cities c = honeySvc.getCitiesFromOptional();
-            model.addAttribute("cities", c.getCities());
-            return "member";
-        }
-        // check if user select other as state/city and enter own city at 'other'
-        // section
-        if (member.getCity().equalsIgnoreCase("Other")) {
-            if (member.getOther().isEmpty() || member.getOther().isBlank()) {
-                FieldError fe = new FieldError("member", "other", "Cannot leave blank for other section");
-                binding.addError(fe);
-                Cities c = honeySvc.getCitiesFromOptional();
-                model.addAttribute("cities", c.getCities());
-                return "member";
-            }
-        }
-        session.setAttribute("member", member);
+        model.addAttribute("name", m.getName());
         model.addAttribute("dinner", dinner);
         return "dinner";
     }
 
-    @PostMapping(path = "/register/nextRegistration/confirmDetails")
+    @PostMapping(path = "/register/confirmDetails")
     public String confirmDetails(Model model, @Valid Dinner dinner, BindingResult binding, HttpSession session) {
+        Member m = (Member) session.getAttribute("member");
         if (binding.hasErrors()) {
+            model.addAttribute("name", m.getName());
             return "dinner";
         }
 
@@ -149,27 +146,28 @@ public class HoneydewController {
         if (dinner.getIsAttending() && dinner.getNumberOfAttendance() == 0) {
             FieldError fe = new FieldError("dinner", "numberOfAttendance", "Cannot have 0 attendees");
             binding.addError(fe);
+            model.addAttribute("name", m.getName());
             return "dinner";
         }
 
-        Member member = (Member) session.getAttribute("member");
         session.setAttribute("dinner", dinner);
-        model.addAttribute("member", member);
+        model.addAttribute("member", m);
+        model.addAttribute("name", m.getName());
         model.addAttribute("dinner", dinner);
         return "details";
     }
 
     @PostMapping(path = "/confirmed")
-    public String completedRegistration(Model model, HttpSession session) {
+    public String completedRegistration(Model model, HttpSession session, @ModelAttribute Login login) {
         Member member = (Member) session.getAttribute("member");
         Dinner dinner = (Dinner) session.getAttribute("dinner");
         DinnerMember dm = new DinnerMember(member, dinner);
-        honeySvc.saveMember(member);
         honeySvc.saveDinnerDetails(dm);
-        int currTime = honeySvc.getTime();
         model.addAttribute("name", member.getName());
+        int currTime = honeySvc.getTime();
         model.addAttribute("currTime", currTime);
-        return "welcome";
+        model.addAttribute("islogin", true);
+        return "index";
     }
 
     @GetMapping(path = "/shirt/cancel")
@@ -272,12 +270,13 @@ public class HoneydewController {
         Quotations quotations = honeySvc.getQuotations(c).get();
         Double totalCost = honeySvc.getTotalCost(quotations, c);
         int numberOfShirts = honeySvc.getTotalQuantity(quotations);
-        String memberName = honeySvc.getMemberById(po.getMemberId()).getName();
+        // IMPORTANT issue below
+        // String memberName = honeySvc.getMemberByEmail(po.getMemberId()).getName();
         String deliveryAddress = po.getAddress();
         model.addAttribute("quotations", quotations);
         model.addAttribute("numberOfShirts", numberOfShirts);
         model.addAttribute("total", totalCost);
-        model.addAttribute("memberName", memberName);
+        // model.addAttribute("memberName", memberName);
         model.addAttribute("deliveryAddress", deliveryAddress);
 
         honeySvc.saveShirtOrder(c);

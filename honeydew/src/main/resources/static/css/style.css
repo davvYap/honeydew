@@ -20,7 +20,7 @@ body {
 }
 
 .custom-header {
-  font-weight: 600;
+  font-weight: 450;
   color: #fdfdfe;
   text-shadow: 0px 0px 5px #93d3c3, 0px 0px 10px #93d398, 0px 0px 10px #93d3ab, 0px 0px 20px #93d3ca;
 }
@@ -31,7 +31,7 @@ body {
 }
 
 .input-group-text {
-  width: 8rem;
+  width: 10rem;
 }
 
 @import url("https://fonts.googleapis.com/css?family=Exo:400,700");

@@ -9,21 +9,23 @@
     <link rel="stylesheet" href="/css/bootstrap.css" />
   </head>
   <body class="">
+    <nav>
+      <nav class="navbar navbar-dark bg-dark">
+        <div class="container-fluid">
+          <a href="/home" class="navbar-brand ms-2">Home</a>
+          <span class="navbar-text" data-th-text="${name}"></span>
+          <form class="d-flex">
+            <a href="/logout" class="btn btn-outline-danger me-2" role="button">Logout</a>
+          </form>
+        </div>
+      </nav>
+    </nav>
     <div class="container-fluid context">
-      <div class="row mx-5 mt-5 d-flex justify-content-around">
-        <span class="col-2 text-center">
-          <a href="/" class="btn btn-outline-light">Home</a>
-        </span>
-      </div>
       <div class="row justify-content-center align-items-center">
         <div class="my-3 col-5">
           <h1 class="h1 my-3 text-light text-center">Please confirm your details</h1>
           <div class="table-responsive">
             <table class="table table-light table-hover" data-th-object="${member}">
-              <tr>
-                <td>ID:</td>
-                <td data-th-text="*{id}"></td>
-              </tr>
               <tr>
                 <td>Name:</td>
                 <td data-th-text="*{name}"></td>
@@ -89,20 +91,18 @@
                   type="submit"
                   class="btn btn-outline-light"
                   style="width: 6rem"
-                  onclick="return confirm('Do you want to proceed to the next page?')">
+                  onclick="return confirm('Confirm your details are correct?') && registerDinner(event)">
                   Submit
                 </button>
               </form>
             </span>
-            <!-- <span class="col-2 text-center">
-              <a
-                data-th-href="@{'/create/delete/' + ${team.teamName}}"
-                class="btn btn-outline-danger"
-                role="button"
-                style="width: 6rem">
-                Delete
-              </a>
-            </span> -->
+          </div>
+          <div class="row d-flex justify-content-center align-items-center">
+            <div class="col-3 text-center">
+              <form method="GET" data-th-action="@{/register}">
+                <button type="submit" class="btn btn-danger mt-3">Back</button>
+              </form>
+            </div>
           </div>
         </div>
       </div>

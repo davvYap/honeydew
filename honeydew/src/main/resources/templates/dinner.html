@@ -9,11 +9,22 @@
     <title>Dinner</title>
   </head>
   <body class="context">
+    <nav>
+      <nav class="navbar navbar-dark bg-dark">
+        <div class="container-fluid">
+          <a href="/home" class="navbar-brand ms-2">Home</a>
+          <span class="navbar-text" data-th-text="${name}"></span>
+          <form class="d-flex">
+            <a href="/logout" class="btn btn-outline-danger me-2" role="button">Logout</a>
+          </form>
+        </div>
+      </nav>
+    </nav>
     <section>
       <div class="container-fluid context">
         <div class="row d-flex justify-content-center align-items-center">
           <div class="col-8">
-            <h1 class="my-5 py-3 text-light text-center" id="homeheader">
+            <h1 class="my-3 py-3 text-light text-center" id="homeheader">
               Register for Honeydew 20th Anniversary Dinner 🍴
             </h1>
           </div>
@@ -21,7 +32,7 @@
             <form
               action=""
               method="post"
-              data-th-action="@{/register/nextRegistration/confirmDetails}"
+              data-th-action="@{/register/confirmDetails}"
               data-th-object="${dinner}">
               <!-- isAttending -->
               <div
@@ -174,11 +185,6 @@
               </div>
             </form>
             <div class="row d-flex justify-content-center align-items-center">
-              <div class="col-3 text-center">
-                <form method="GET" data-th-action="@{/member}">
-                  <button type="submit" class="btn btn-primary mt-3">Back</button>
-                </form>
-              </div>
               <div class="col-3 text-center">
                 <form method="GET" data-th-action="@{/}">
                   <button type="submit" class="btn btn-danger mt-3">Cancel</button>

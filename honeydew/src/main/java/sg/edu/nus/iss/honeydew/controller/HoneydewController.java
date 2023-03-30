@@ -38,6 +38,7 @@ public class HoneydewController {
     public String getHome(Model model, HttpSession session, @ModelAttribute Login login) {
         // check if current status is login or not
         Member member = (Member) session.getAttribute("member");
+        session.removeAttribute("cart");
         if (member != null) {
             System.out.println("Member is login!");
             int currTime = honeySvc.getTime();
@@ -170,12 +171,6 @@ public class HoneydewController {
         return "index";
     }
 
-    @GetMapping(path = "/shirt/cancel")
-    public String cancelShirtOrder(Model model, HttpSession session) {
-        session.invalidate();
-        return "index";
-    }
-
     // NOTE back button from delivery view
     @GetMapping(path = "/shirt")
     public String purchaseShirt(Model model, @ModelAttribute Shirt shirt, HttpSession session) {
@@ -220,6 +215,7 @@ public class HoneydewController {
     @PostMapping(path = "/shirt/checkout")
     public String checkoutCart(Model model, HttpSession session, @ModelAttribute PO po)
             throws IOException {
+        Member m = (Member) session.getAttribute("member");
         Cart c = (Cart) session.getAttribute("cart");
 
         // NOTE check if cart is empty or missing
@@ -230,11 +226,9 @@ public class HoneydewController {
             model.addAttribute("shirt", new Shirt());
             return "shirt";
         }
-
+        po.setEmail(m.getEmail());
         model.addAttribute("cart", c);
         model.addAttribute("po", po);
-        List<Member> members = honeySvc.getAllMembers();
-        model.addAttribute("members", members);
         return "delivery";
     }
 
@@ -246,10 +240,9 @@ public class HoneydewController {
 
         if (binding.hasErrors()) {
             System.out.println("PO has error!");
+            model.addAttribute("addressEmpty", true);
             model.addAttribute("cart", c);
             model.addAttribute("po", po);
-            List<Member> members = honeySvc.getAllMembers();
-            model.addAttribute("members", members);
             return "delivery";
         }
 

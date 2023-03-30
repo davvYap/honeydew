@@ -142,7 +142,8 @@ public class HoneydewService {
 
         // determine what to post -> JsonArray
         JsonArray cartJSON = cart.toJSONarray();
-        RequestEntity req = RequestEntity.post(url)
+        RequestEntity req = RequestEntity
+                .post(url)
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(cartJSON.toString(), String.class);
 

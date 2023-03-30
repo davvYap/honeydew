@@ -4,12 +4,15 @@ import java.io.Serializable;
 
 import jakarta.json.Json;
 import jakarta.json.JsonObjectBuilder;
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 
 public class PO implements Serializable {
-    @NotNull(message = "Profile cannot be null")
-    private String memberId;
+
+    @NotEmpty(message = "Email cannot be empty")
+    @Email(message = "Invalid email format")
+    private String email;
 
     @NotNull(message = "Address cannot be null")
     @NotEmpty(message = "Address cannot be empty")
@@ -17,12 +20,12 @@ public class PO implements Serializable {
 
     private double totalCost;
 
-    public String getMemberId() {
-        return memberId;
+    public String getEmail() {
+        return email;
     }
 
-    public void setMemberId(String memberId) {
-        this.memberId = memberId;
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public String getAddress() {
@@ -43,7 +46,7 @@ public class PO implements Serializable {
 
     public JsonObjectBuilder toJSON() {
         return Json.createObjectBuilder()
-                .add("member_id", this.memberId)
+                .add("email", this.email)
                 .add("address", this.address)
                 .add("total_cost", this.totalCost);
     }

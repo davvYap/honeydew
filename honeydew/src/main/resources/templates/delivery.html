@@ -26,22 +26,14 @@
               data-th-action="@{/shirt/checkout/complete}"
               data-th-object="${po}">
               <div class="input-group mb-1">
-                <span class="input-group-text" style="width: 10rem">Select your profile</span>
-                <select
-                  data-th-field="*{memberId}"
-                  class="form-select"
-                  aria-label="Default select example">
-                  <option
-                    data-th-each=" member : ${members}"
-                    data-th-value="${member.getId()}"
-                    data-th-text="${member.getName()}"></option>
-                </select>
+                <span class="input-group-text">Email</span>
+                <input type="text" class="form-control" data-th-field="*{email}" />
               </div>
               <div class="mb-1">
                 <span
                   class="error"
-                  data-th-if="${#fields.hasErrors('memberId')}"
-                  data-th-errors="*{memberId}">
+                  data-th-if="${#fields.hasErrors('email')}"
+                  data-th-errors="*{email}">
                 </span>
               </div>
 
@@ -71,7 +63,7 @@
               <button
                 type="submit"
                 class="btn btn-success mt-3"
-                onclick="return confirm('Do you want to proceed to the next page?')">
+                onclick="return confirm('Confirm your detials is correct?')">
                 Order
               </button>
             </form>
@@ -108,7 +100,7 @@
                 </form>
               </div>
               <div class="col-3">
-                <form method="GET" data-th-action="@{/shirt/cancel}">
+                <form method="GET" data-th-action="@{/}">
                   <button type="submit" class="btn btn-danger mt-3">Cancel</button>
                 </form>
               </div>
@@ -133,5 +125,6 @@
     </div>
     <script src="/js/script.js"></script>
     <script src="/js/bootstrap.js"></script>
+    <script data-th-if="${addressEmpty}" src="/js/delivery.js"></script>
   </body>
 </html>

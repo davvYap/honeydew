@@ -61,7 +61,7 @@ public class Cart implements Serializable {
 
         return Json.createObjectBuilder()
                 .add("invoiceId", this.invoiceId)
-                .add("member_id", this.po.getMemberId())
+                .add("email", this.po.getEmail())
                 .add("address", this.po.getAddress())
                 .add("items", arrBuilder)
                 .add("total_cost", this.po.getTotalCost())

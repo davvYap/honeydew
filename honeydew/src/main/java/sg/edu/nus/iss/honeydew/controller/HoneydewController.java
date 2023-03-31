@@ -12,8 +12,11 @@ import org.springframework.validation.FieldError;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+
+import com.fasterxml.jackson.annotation.JsonCreator.Mode;
 
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
@@ -124,6 +127,15 @@ public class HoneydewController {
         session.invalidate();
         model.addAttribute("login", login);
         return "index";
+    }
+
+    // get member page
+    @GetMapping(path = "/member")
+    public String getMemberPage(Model model, HttpSession session) {
+        Member m = (Member) session.getAttribute("member");
+        model.addAttribute("islogin", true);
+        model.addAttribute("member", m);
+        return "memberPage";
     }
 
     // register dinner
@@ -237,6 +249,7 @@ public class HoneydewController {
             BindingResult binding)
             throws IOException {
         Cart c = (Cart) session.getAttribute("cart");
+        Member m = (Member) session.getAttribute("member");
 
         if (binding.hasErrors()) {
             System.out.println("PO has error!");
@@ -259,17 +272,17 @@ public class HoneydewController {
 
         c.setPo(po);
 
-        // create quotation class to retrieve shirt cost based on json string
-        Quotations quotations = honeySvc.getQuotations(c).get();
+        // create quotation class to retrieve shirt cost, ( not based on json string
+        // from honeydeww_server)
+        Quotations quotations = honeySvc.getQuotations(c);
         Double totalCost = honeySvc.getTotalCost(quotations, c);
         int numberOfShirts = honeySvc.getTotalQuantity(quotations);
-        // IMPORTANT issue below
-        // String memberName = honeySvc.getMemberByEmail(po.getMemberId()).getName();
         String deliveryAddress = po.getAddress();
+
+        model.addAttribute("member", m);
         model.addAttribute("quotations", quotations);
         model.addAttribute("numberOfShirts", numberOfShirts);
         model.addAttribute("total", totalCost);
-        // model.addAttribute("memberName", memberName);
         model.addAttribute("deliveryAddress", deliveryAddress);
 
         honeySvc.saveShirtOrder(c);

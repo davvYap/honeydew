@@ -5,39 +5,81 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="/css/style.css" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
+      crossorigin="anonymous" />
     <link rel="stylesheet" href="/css/bootstrap.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css" />
     <title>Home</title>
   </head>
-  <body class="context">
-    <nav>
-      <nav class="navbar navbar-dark bg-dark">
-        <div data-th-unless="${islogin}" class="container-fluid">
-          <a href="/home" class="navbar-brand ms-2">Home</a>
-          <form class="d-flex">
-            <!-- Button trigger modal -->
-            <button
-              class="btn btn-outline-success me-2"
-              type="button"
-              data-bs-toggle="modal"
-              data-bs-target="#login">
-              Login
-            </button>
-            <a href="/signUp" class="btn btn-sm btn-outline-secondary" role="button">Sign Up</a>
-          </form>
-        </div>
-        <div data-th-if="${islogin}" class="container-fluid">
-          <a href="/home" class="navbar-brand ms-2">Home</a>
-          <span class="navbar-text" data-th-text="${name}"></span>
+  <body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+      <!-- Without Login -->
+      <div data-th-unless="${islogin}" class="container-fluid">
+        <a href="/home" class="navbar-brand ms-2">Home</a>
+        <form class="d-flex">
+          <!-- Button trigger modal -->
+          <button
+            class="btn btn-outline-success me-2"
+            type="button"
+            data-bs-toggle="modal"
+            data-bs-target="#login">
+            Login
+          </button>
+          <a href="/signUp" class="btn btn-sm btn-outline-secondary" role="button">Sign Up</a>
+        </form>
+      </div>
+      <!-- After Login -->
+      <div data-th-if="${islogin}" class="container-fluid">
+        <a href="/member" class="navbar-brand ms-2"><i class="bi bi-person-circle"></i></a>
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarSupportedContent"
+          aria-controls="navbarSupportedContent"
+          aria-expanded="false"
+          aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <li class="nav-item">
+              <a class="nav-link active" aria-current="page" href="/home">Home</a>
+            </li>
+            <li class="nav-item dropdown">
+              <a
+                class="nav-link dropdown-toggle"
+                href="#"
+                id="navbarDropdown"
+                role="button"
+                data-bs-toggle="dropdown"
+                aria-expanded="false">
+                Dropdown
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <li><a class="dropdown-item" href="/register">Register Dinner</a></li>
+                <li><a class="dropdown-item" href="/shirt">Buy Shirt</a></li>
+                <li><hr class="dropdown-divider" /></li>
+                <li><a class="dropdown-item" href="#">Something else here</a></li>
+              </ul>
+            </li>
+          </ul>
+
           <form class="d-flex">
             <a href="/logout" class="btn btn-outline-danger me-2" role="button">Logout</a>
           </form>
         </div>
-      </nav>
+      </div>
     </nav>
     <section>
       <div class="container-fluid context">
         <div class="row d-flex justify-content-center align-items-center">
-          <div class="col-6">
+          <div class="col-md-6">
             <h1
               data-th-unless="${islogin}"
               class="my-3 py-1 text-light text-center"
@@ -49,34 +91,103 @@
                 data-th-if="${currTime le 12}"
                 class="my-3 py-1 text-light text-center"
                 id="homeheader">
-                Good Morning <span data-th-text="${name}"></span> 🌞
+                GOOD MORNING <span data-th-text="${name}"></span> 🌞
               </h1>
               <h1
                 data-th-if="${currTime ge 12 and currTime le 18}"
                 class="my-3 py-1 text-light text-center"
                 id="homeheader">
-                Good Afternoon <span data-th-text="${name}"></span> 🌞
+                GOOD AFTERNOON <span data-th-text="${name}"></span> 🌞
               </h1>
               <h1
                 data-th-if="${currTime ge 18}"
                 class="my-3 py-1 text-light text-center"
                 id="homeheader">
-                Good Evening <span data-th-text="${name}"></span> 🌛
+                GOOD EVENING <span data-th-text="${name}"></span> 🌛
               </h1>
             </div>
           </div>
         </div>
         <div class="row d-flex justify-content-center align-items-center">
-          <div class="row d-flex justify-content-center align-items-center">
+          <div data-th-unless="${islogin}" class="col-6 text-center">
             <img src="/images/logo1.png" id="honeydew-logo" class="img-fluid" alt="..." />
-            <div data-th-if="${islogin}">
-              <div class="text-center">
-                <a href="/register" class="btn btn-outline-light mt-3" role="button"
-                  >Register Dinner</a
-                >
-              </div>
-              <div class="text-center">
-                <a href="/shirt" class="btn btn-outline-light mt-3" role="button">Purchase Shirt</a>
+          </div>
+
+          <div data-th-if="${islogin}">
+            <!--Carousel-->
+            <div class="row d-flex justify-content-center align-items-center">
+              <div class="col-6 text-center">
+                <div id="carouselExampleCaptions" class="carousel slide" data-bs-ride="carousel">
+                  <div class="carousel-indicators">
+                    <button
+                      type="button"
+                      data-bs-target="#carouselExampleCaptions"
+                      data-bs-slide-to="0"
+                      class="active"
+                      aria-current="true"
+                      aria-label="Slide 1"></button>
+                    <button
+                      type="button"
+                      data-bs-target="#carouselExampleCaptions"
+                      data-bs-slide-to="1"
+                      aria-label="Slide 2"></button>
+                    <button
+                      type="button"
+                      data-bs-target="#carouselExampleCaptions"
+                      data-bs-slide-to="2"
+                      aria-label="Slide 3"></button>
+                  </div>
+                  <div class="carousel-inner">
+                    <div class="carousel-item active">
+                      <img src="/images/pic1.JPEG" class="d-block w-100" alt="..." />
+                      <div class="carousel-caption d-none d-md-block">
+                        <h5>Honeydew CNY Dinner</h5>
+                        <p>Forget what year.</p>
+                      </div>
+                    </div>
+                    <div class="carousel-item">
+                      <img src="/images/pic2.JPEG" class="d-block w-100" alt="..." />
+                      <div class="carousel-caption d-none d-md-block">
+                        <h5>Honeydew CNY Dinner</h5>
+                        <p>Forget what year also.</p>
+                      </div>
+                    </div>
+                    <div class="carousel-item">
+                      <img src="/images/pic3.JPEG" class="d-block w-100" alt="..." />
+                      <div class="carousel-caption d-none d-md-block">
+                        <h5>KK12 CC Dinner</h5>
+                        <p>Guess what, forget what year.</p>
+                      </div>
+                    </div>
+                  </div>
+                  <button
+                    class="carousel-control-prev"
+                    type="button"
+                    data-bs-target="#carouselExampleCaptions"
+                    data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Previous</span>
+                  </button>
+                  <button
+                    class="carousel-control-next"
+                    type="button"
+                    data-bs-target="#carouselExampleCaptions"
+                    data-bs-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Next</span>
+                  </button>
+                </div>
+                <!--Button-->
+                <div class="text-center">
+                  <a href="/register" class="btn btn-outline-light mt-3" role="button"
+                    >Register Dinner</a
+                  >
+                </div>
+                <div class="text-center">
+                  <a href="/shirt" class="btn btn-outline-light mt-3" role="button"
+                    >Purchase Shirt</a
+                  >
+                </div>
               </div>
             </div>
           </div>
@@ -145,7 +256,15 @@
       </ul>
     </div>
     <script src="/js/script.js"></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+      crossorigin="anonymous"></script>
     <script src="/js/bootstrap.js"></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha2/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-qKXV1j0HvMUeCBQ+QVp7JcfGl760yU08IQ+GpUo5hlbpg51QRiuqHAJz8+BrxE/N"
+      crossorigin="anonymous"></script>
     <script data-th-if="${loginAlert}" src="/js/login.js"></script>
   </body>
 </html>

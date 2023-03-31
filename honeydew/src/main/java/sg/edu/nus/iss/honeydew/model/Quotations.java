@@ -6,6 +6,7 @@ import java.io.InputStream;
 import java.io.Serializable;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.UUID;
 
 import jakarta.json.Json;
 import jakarta.json.JsonArray;
@@ -30,6 +31,11 @@ public class Quotations implements Serializable {
 
     public void setQuotations(List<Shirt> quotations) {
         this.quotations = quotations;
+    }
+
+    public static String generateQuotationId() {
+        String id = UUID.randomUUID().toString().substring(0, 6);
+        return id;
     }
 
     public static Quotations createFromJSON(String json) throws IOException {

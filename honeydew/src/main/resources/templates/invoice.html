@@ -9,6 +9,15 @@
     <title>Honeydew Shirt</title>
   </head>
   <body>
+    <nav class="navbar navbar-dark bg-dark">
+      <div class="container-fluid">
+        <a href="/home" class="navbar-brand ms-2">Home</a>
+        <a href="/member" class="navbar-brand ms-2"><i class="bi bi-person-circle"></i></a>
+        <form class="d-flex">
+          <a href="/logout" class="btn btn-outline-danger me-2" role="button">Logout</a>
+        </form>
+      </div>
+    </nav>
     <section>
       <div class="container-fluid context">
         <div class="row d-flex justify-content-center align-items-center">
@@ -20,7 +29,15 @@
             <table class="table table-info table-hover mt-3">
               <tr>
                 <td>Name</td>
-                <td data-th-text="${memberName}"></td>
+                <td data-th-text="${member.getName()}"></td>
+              </tr>
+              <tr>
+                <td>Contact No.</td>
+                <td data-th-text="${member.getPhoneNum()}"></td>
+              </tr>
+              <tr>
+                <td>Email</td>
+                <td data-th-text="${member.getEmail()}"></td>
               </tr>
               <tr>
                 <td>Address</td>
@@ -61,7 +78,7 @@
 
         <div class="row d-flex justify-content-center align-items-center">
           <div class="col-3 text-center">
-            <form method="GET" data-th-action="@{/shirt/cancel}">
+            <form method="GET" data-th-action="@{/}">
               <button type="submit" class="btn btn-primary mt-3">Home</button>
             </form>
           </div>

@@ -5,6 +5,7 @@ import java.util.Calendar;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -57,9 +58,9 @@ public class HoneydewService {
         Cities cities = Cities.createFromJSON(response.getBody());
 
         if (cities != null) {
-            for (City city : cities.getCities()) {
-                System.out.println("CITY >>>>>>>>>>>>>>>>>>>>>>>>" + city.getState());
-            }
+            // for (City city : cities.getCities()) {
+            // System.out.println("CITY >>>>>>>>>>>>>>>>>>>>>>>>" + city.getState());
+            // }
             return Optional.of(cities);
         }
         return Optional.empty();
@@ -134,7 +135,7 @@ public class HoneydewService {
     }
 
     // call honeydew_server get quotations
-    public Optional<Quotations> getQuotations(Cart cart) throws IOException {
+    public Optional<Quotations> getQuotationsFromAPI(Cart cart) throws IOException {
 
         String url = "http://localhost:3000/api/quotation";
         // String url =
@@ -163,6 +164,50 @@ public class HoneydewService {
             return Optional.of(quotations);
         }
         return Optional.empty();
+    }
+
+    // generate shirt quotations without honeydew_server
+    public double calculateShirtCost(Shirt shirt) {
+        double cost = 0;
+        String color = shirt.getColor().toLowerCase();
+        switch (color) {
+            case "yellow", "green":
+                cost += 30.5;
+                break;
+            case "orange", "red":
+                cost += 35;
+                break;
+            case "black", "blue":
+                cost += 40.5;
+                break;
+        }
+        switch (shirt.getSize()) {
+            case "XS", "S":
+                cost *= 1;
+                break;
+            case "M", "L":
+                cost *= 1.2;
+                break;
+            case "XL", "XXL":
+                cost *= 1.5;
+                break;
+            default:
+                cost *= 1;
+        }
+        double roundedCost = Math.round(cost * 100.0) / 100.0;
+        shirt.setPrice(roundedCost);
+        return roundedCost;
+    }
+
+    // generate Quotation without honeydew_server
+    public Quotations getQuotations(Cart cart) {
+        Quotations q = new Quotations();
+        q.setQuoteId(Quotations.generateQuotationId());
+        q.setQuotations(cart.getItems().stream().map(s -> (Shirt) s).toList());
+        for (Shirt s : q.getQuotations()) {
+            s.setPrice(calculateShirtCost(s));
+        }
+        return q;
     }
 
     // calculate total cost
@@ -202,4 +247,5 @@ public class HoneydewService {
         Calendar cal = Calendar.getInstance();
         return cal.get(Calendar.HOUR_OF_DAY);
     }
+
 }

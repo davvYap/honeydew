@@ -1,9 +1,10 @@
 body {
-  margin: auto;
+  margin: 0;
 }
 
 .navbar {
   z-index: 1;
+  position: fixed;
 }
 
 #homeheader {
@@ -14,6 +15,14 @@ body {
 
 #honeydew-logo {
   border-radius: 50%;
+}
+
+#hintJpg {
+  height: 30px;
+}
+
+.toast {
+  position: absolute !important;
 }
 
 .custom-header {
@@ -57,7 +66,9 @@ body {
 .context {
   width: 100%;
   position: absolute;
-  z-index: 1;
+  z-index: auto;
+  margin-top: 0 !important;
+  margin-bottom: 0 !important;
 }
 
 .context h1 {
@@ -82,7 +93,7 @@ body {
 }
 
 .circles {
-  position: absolute;
+  /* position: absolute; */
   top: 0;
   left: 0;
   width: 100%;
